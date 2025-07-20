@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  notion-task-manager:
+    build: .
+    image: nickborgers/notion-home-task-manager:latest
+    container_name: notion-home-task-manager
+    volumes:
+      # Mount the config file
+      - ./notion_config.yaml:/app/notion_config.yaml:ro
+      # Mount logs directory if needed
+      - ./logs:/app/logs
+    environment:
+      # You can override config with environment variables if needed
+      - PYTHONUNBUFFERED=1
+    # Run once and exit (for scheduled tasks)
+    restart: "no"
+    # For development, you can override the command
+    # command: ["python", "-c", "import sys; print('Python version:', sys.version)"] 

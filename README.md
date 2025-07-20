@@ -34,11 +34,14 @@ Active Tasks (Notion DB)
 
 ### Prerequisites
 
-- Python 3.7+
+- Python 3.7+ (for local development)
+- Docker (for containerized deployment)
 - Notion account with API access
 - Two Notion databases (Template Tasks and Active Tasks)
 
 ### Installation
+
+#### Option 1: Local Development
 
 1. Clone the repository:
 ```bash
@@ -49,6 +52,24 @@ cd TaskManager
 2. Install dependencies:
 ```bash
 pip install -r requirements.txt
+```
+
+#### Option 2: Docker Deployment
+
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd TaskManager
+```
+
+2. Build the Docker image:
+```bash
+docker build -t notion-home-task-manager .
+```
+
+3. Or use Docker Compose:
+```bash
+docker-compose up --build
 ```
 
 3. Configure Notion integration:
@@ -90,8 +111,19 @@ notion:
 
 The main script generates tasks for the coming week:
 
+#### Local Development
 ```bash
 python scripts/weekly_rollover/create_active_tasks_from_templates.py
+```
+
+#### Docker
+```bash
+docker run --rm -v $(pwd)/notion_config.yaml:/app/notion_config.yaml:ro notion-home-task-manager
+```
+
+#### Docker Compose
+```bash
+docker-compose run --rm notion-task-manager
 ```
 
 This script:
@@ -128,6 +160,8 @@ This allows the same task template to be scheduled for both themed days.
 
 - `notion_config.yaml`: Notion API configuration
 - `requirements.txt`: Python dependencies
+- `Dockerfile`: Docker container configuration
+- `docker-compose.yml`: Docker Compose configuration for easy deployment
 
 ## Dependencies
 
