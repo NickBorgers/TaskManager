@@ -13,6 +13,8 @@ services:
     environment:
       # You can override config with environment variables if needed
       - PYTHONUNBUFFERED=1
+      # Add your Notion integration token here or use a .env file
+      # - NOTION_INTEGRATION_TOKEN=your_integration_token_here
     # Run once and exit (for scheduled tasks)
     restart: "no"
     # For development, you can override the command

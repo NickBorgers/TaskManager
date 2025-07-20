@@ -78,14 +78,41 @@ docker-compose up --build
    - Copy the integration token
 
 4. Set up configuration:
-   - Create `notion_config.yaml` with your database IDs and integration token
+   - Create `notion_config.yaml` with your database IDs
+   - Set the `NOTION_INTEGRATION_TOKEN` environment variable
+   - **Important**: You must create your own Notion databases and configure them in this file
    - Example configuration:
 ```yaml
-notion:
-  integration_token: "your_integration_token_here"
-  template_database_id: "your_template_db_id"
-  active_database_id: "your_active_db_id"
+template_tasks_db_id: "your_template_database_id_here"
+active_tasks_db_id: "your_active_database_id_here"
 ```
+
+5. Set environment variable:
+```bash
+export NOTION_INTEGRATION_TOKEN="your_integration_token_here"
+```
+
+### ⚠️ Important: Database Configuration Required
+
+**You must create your own Notion databases and configure them in `notion_config.yaml`:**
+
+1. **Create Template Tasks Database**:
+   - Create a new Notion database
+   - Add the required properties (Name, Category, Frequency, Last Completed, Description, Status)
+   - Copy the database ID from the URL
+
+2. **Create Active Tasks Database**:
+   - Create a new Notion database
+   - Add the required properties (Name, Category, Status, Planned Date, TemplateId, Description)
+   - Copy the database ID from the URL
+
+3. **Share with Integration**:
+   - Share both databases with your Notion integration
+   - Ensure the integration has edit permissions
+
+4. **Update Configuration**:
+   - Replace the placeholder values in `notion_config.yaml` with your actual database IDs
+   - Set the `NOTION_INTEGRATION_TOKEN` environment variable with your integration token
 
 ### Database Schema
 
@@ -118,11 +145,15 @@ python scripts/weekly_rollover/create_active_tasks_from_templates.py
 
 #### Docker
 ```bash
-docker run --rm -v $(pwd)/notion_config.yaml:/app/notion_config.yaml:ro notion-home-task-manager
+docker run --rm \
+  -v $(pwd)/notion_config.yaml:/app/notion_config.yaml:ro \
+  -e NOTION_INTEGRATION_TOKEN="your_integration_token_here" \
+  notion-home-task-manager
 ```
 
 #### Docker Compose
 ```bash
+# Add environment variable to docker-compose.yml or use .env file
 docker-compose run --rm notion-task-manager
 ```
 
