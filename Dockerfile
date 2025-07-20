@@ -26,5 +26,8 @@ USER app
 ENV PYTHONPATH=/app
 ENV PYTHONUNBUFFERED=1
 
-# Default command
-CMD ["python", "scripts/weekly_rollover/create_active_tasks_from_templates.py"] 
+# Create logs directory
+RUN mkdir -p /app/logs
+
+# Default command - run the scheduler
+CMD ["python", "scripts/scheduler.py"] 
