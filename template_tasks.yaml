@@ -1,0 +1,63 @@
+schema:
+  Category:
+    type: select
+    options:
+    - name: Random/Monday
+      color: purple
+    - name: Cooking/Tuesday
+      color: gray
+    - name: Cleaning/Thursday
+      color: blue
+  Priority:
+    type: select
+    options:
+    - name: Urgent
+      color: red
+    - name: Normal
+      color: gray
+  Documentation:
+    type: url
+  Frequency:
+    type: select
+    options:
+    - name: Daily
+      color: blue
+    - name: Weekly
+      color: green
+    - name: Monthly
+      color: purple
+    - name: Quarterly
+      color: orange
+    - name: Yearly
+      color: red
+    - name: Monday/Thursday
+      color: brown
+  Last Completed:
+    type: date
+  Task:
+    type: title
+tasks:
+- id: 2300ac25-7c56-80a2-943d-ffd13a372595
+  properties:
+    Category: Cleaning/Thursday
+    Priority: null
+    Documentation: null
+    Frequency: Weekly
+    Last Completed: null
+    Task: Clean Primary Bathroom
+- id: 2300ac25-7c56-8023-a330-eb10bafe57fe
+  properties:
+    Category: Cooking/Tuesday
+    Priority: Normal
+    Documentation: null
+    Frequency: Weekly
+    Last Completed: null
+    Task: Review  Inventory List and identify missing items
+- id: 2300ac25-7c56-806b-813d-f88d80d62581
+  properties:
+    Category: Random/Monday
+    Priority: Urgent
+    Documentation: null
+    Frequency: Weekly
+    Last Completed: null
+    Task: Check Cat Fountains
