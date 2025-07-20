@@ -10,15 +10,15 @@ You need to set up the following secrets in your GitHub repository:
 2. Navigate to "Secrets and variables" → "Actions"
 3. Add the following secrets:
 
-### DOCKERHUB_USERNAME
+### DOCKER_HUB_USERNAME
 Your Docker Hub username (e.g., `nickborgers`)
 
-### DOCKERHUB_TOKEN
-Your Docker Hub access token:
+### DOCKER_HUB_PAT
+Your Docker Hub Personal Access Token:
 1. Go to https://hub.docker.com/settings/security
 2. Click "New Access Token"
 3. Give it a name (e.g., "GitHub Actions")
-4. Copy the token and save it as `DOCKERHUB_TOKEN`
+4. Copy the token and save it as `DOCKER_HUB_PAT`
 
 ## Workflow Behavior
 
