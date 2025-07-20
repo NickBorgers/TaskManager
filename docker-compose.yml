@@ -10,6 +10,8 @@ services:
       - ./notion_config.yaml:/app/notion_config.yaml:ro
       # Mount logs directory for persistence
       - ./logs:/app/logs
+      # Mount state directory for first-run tracking
+      - ./state:/app/state
     environment:
       # You can override config with environment variables if needed
       - PYTHONUNBUFFERED=1
