@@ -8,14 +8,14 @@ services:
     volumes:
       # Mount the config file
       - ./notion_config.yaml:/app/notion_config.yaml:ro
-      # Mount logs directory if needed
+      # Mount logs directory for persistence
       - ./logs:/app/logs
     environment:
       # You can override config with environment variables if needed
       - PYTHONUNBUFFERED=1
       # Add your Notion integration token here or use a .env file
       # - NOTION_INTEGRATION_TOKEN=your_integration_token_here
-    # Run once and exit (for scheduled tasks)
-    restart: "no"
-    # For development, you can override the command
-    # command: ["python", "-c", "import sys; print('Python version:', sys.version)"] 
+    # Run continuously with restart policy
+    restart: unless-stopped
+    # For development, you can override the command to run once
+    # command: ["python", "scripts/weekly_rollover/create_active_tasks_from_templates.py"] 

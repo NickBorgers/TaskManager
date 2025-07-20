@@ -16,6 +16,8 @@ The system consists of two Notion databases:
 - **Completion Tracking**: Automatically update template completion dates based on active task status
 - **Duplicate Prevention**: Avoid creating duplicate active tasks
 - **Live Notion Integration**: Direct API integration for real-time updates
+- **Automated Scheduling**: Built-in scheduler runs weekly on Fridays at 9:00 AM
+- **Continuous Operation**: Container runs continuously and handles its own scheduling
 
 ## Architecture
 
@@ -136,25 +138,44 @@ export NOTION_INTEGRATION_TOKEN="your_integration_token_here"
 
 ### Weekly Task Generation
 
-The main script generates tasks for the coming week:
+The system automatically generates tasks for the coming week every Friday at 9:00 AM.
 
-#### Local Development
+#### Manual Run (Local Development)
 ```bash
 python scripts/weekly_rollover/create_active_tasks_from_templates.py
 ```
 
-#### Docker
+#### Manual Run (Docker)
 ```bash
 docker run --rm \
   -v $(pwd)/notion_config.yaml:/app/notion_config.yaml:ro \
   -e NOTION_INTEGRATION_TOKEN="your_integration_token_here" \
+  notion-home-task-manager \
+  python scripts/weekly_rollover/create_active_tasks_from_templates.py
+```
+
+#### Continuous Operation (Docker)
+```bash
+# Start the scheduler (runs continuously)
+docker run -d \
+  --name notion-task-manager \
+  -v $(pwd)/notion_config.yaml:/app/notion_config.yaml:ro \
+  -v $(pwd)/logs:/app/logs \
+  -e NOTION_INTEGRATION_TOKEN="your_integration_token_here" \
+  --restart unless-stopped \
   notion-home-task-manager
 ```
 
-#### Docker Compose
+#### Docker Compose (Continuous Operation)
 ```bash
-# Add environment variable to docker-compose.yml or use .env file
-docker-compose run --rm notion-task-manager
+# Start the scheduler (runs continuously)
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop the scheduler
+docker-compose down
 ```
 
 This script:
@@ -186,6 +207,7 @@ This allows the same task template to be scheduled for both themed days.
 ### Main Scripts
 
 - `scripts/weekly_rollover/create_active_tasks_from_templates.py`: Main script for generating weekly tasks
+- `scripts/scheduler.py`: Scheduler that runs task generation weekly on Fridays at 9:00 AM
 
 ### Configuration
 
@@ -200,6 +222,7 @@ This allows the same task template to be scheduled for both themed days.
 - `pyyaml`: YAML configuration handling
 - `python-dateutil`: Date manipulation and recurrence logic
 - `pytz`: Timezone handling
+- `schedule`: Task scheduling for automated runs
 
 ## Logging
 
@@ -219,10 +242,11 @@ The system includes robust error handling for:
 
 ## Best Practices
 
-1. **Run Weekly**: Execute the main script weekly to generate tasks for the coming week
+1. **Use Continuous Operation**: Run the container with `--restart unless-stopped` for automatic weekly task generation
 2. **Monitor Logs**: Check logs for any issues with task generation or API calls
 3. **Backup Templates**: Keep template tasks organized and up-to-date
 4. **Review Categories**: Ensure template tasks have appropriate categories for themed days
+5. **Schedule Timing**: The scheduler runs every Friday at 9:00 AM UTC - adjust your timezone accordingly
 
 ## Troubleshooting
 
