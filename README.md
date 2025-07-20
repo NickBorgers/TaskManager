@@ -32,6 +32,11 @@ Active Tasks (Notion DB)
 └── Links back to template tasks via TemplateId property
 ```
 
+## How was this built?
+This was built pretty much entirely with vibe coding using [Cursor's IDE](https://cursor.com/?from=home). It was my first time using such a tool, and the fact I could produce this in less than 3 hours is... pretty wild. I did need to jump in and fix mistakes it made, and this included running a debugger to see the actual objects available and how to make sense of them. I could not have done this without my prior skills; though I also could not have used my skills to deliver so much so quickly.
+
+You can see my actual chat with the agent in [cursor_agent_chat.md](cursor_agent_chat.md) if you want. I also had already modeled the data structures in [schemas.md](schemas.md).
+
 ## Setup
 
 ### Prerequisites
