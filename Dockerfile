@@ -29,5 +29,8 @@ ENV PYTHONUNBUFFERED=1
 # Create logs directory
 RUN mkdir -p /app/logs
 
+# Create a directory for persistent state
+RUN mkdir -p /app/state
+
 # Default command - run the scheduler
 CMD ["python", "scripts/scheduler.py"] 

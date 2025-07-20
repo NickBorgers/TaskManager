@@ -18,6 +18,7 @@ The system consists of two Notion databases:
 - **Live Notion Integration**: Direct API integration for real-time updates
 - **Automated Scheduling**: Built-in scheduler runs weekly on Fridays at 9:00 AM
 - **Continuous Operation**: Container runs continuously and handles its own scheduling
+- **First-Run Execution**: Automatically runs task generation on first container startup regardless of day
 
 ## Architecture
 
@@ -143,7 +144,7 @@ export NOTION_INTEGRATION_TOKEN="your_integration_token_here"
 
 ### Weekly Task Generation
 
-The system automatically generates tasks for the coming week every Friday at 9:00 AM.
+The system automatically generates tasks for the coming week every Friday at 9:00 AM. On first startup, it will run immediately regardless of the day to ensure tasks are generated for the current week.
 
 #### Manual Run (Local Development)
 ```bash
@@ -166,6 +167,7 @@ docker run -d \
   --name notion-task-manager \
   -v $(pwd)/notion_config.yaml:/app/notion_config.yaml:ro \
   -v $(pwd)/logs:/app/logs \
+  -v $(pwd)/state:/app/state \
   -e NOTION_INTEGRATION_TOKEN="your_integration_token_here" \
   --restart unless-stopped \
   notion-home-task-manager

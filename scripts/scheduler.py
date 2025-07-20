@@ -44,9 +44,31 @@ def schedule_weekly_run():
     schedule.every().friday.at("09:00").do(run_weekly_tasks)
     logger.info("Scheduled weekly task generation for Friday at 9:00 AM")
 
+def is_first_run():
+    """Check if this is the first time the container is running"""
+    marker_file = "/app/state/.first_run_complete"
+    return not os.path.exists(marker_file)
+
+def mark_first_run_complete():
+    """Mark that the first run has been completed"""
+    marker_file = "/app/state/.first_run_complete"
+    try:
+        with open(marker_file, 'w') as f:
+            f.write(f"First run completed at {datetime.now(pytz.UTC).isoformat()}")
+        logger.info("Marked first run as complete")
+    except Exception as e:
+        logger.warning(f"Could not create marker file: {e}")
+
 def run_immediately_if_needed():
-    """Run immediately if it's Friday and past 9:00 AM and hasn't been run today"""
+    """Run immediately if it's the first run or if it's Friday and past 9:00 AM"""
     now = datetime.now(pytz.UTC)
+    
+    # Check if this is the first run
+    if is_first_run():
+        logger.info("First time running - executing task generation immediately")
+        run_weekly_tasks()
+        mark_first_run_complete()
+        return
     
     # Check if it's Friday
     if now.weekday() == 4:  # Friday is weekday 4
