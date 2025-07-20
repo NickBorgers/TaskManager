@@ -1,2 +1,4 @@
 notion-client 
 pyyaml
+python-dateutil
+pytz

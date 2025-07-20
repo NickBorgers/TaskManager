@@ -16,13 +16,14 @@ classDiagram
     }
 
     class ActiveTask {
-        +Text id <<ref: TemplateTask.id>>
+        +Text id
         +Text Task 
         +Select Priority
         +Select Category
         +Url Documentation*
-        +Checkbox Complete
+        +Status Status
         +Date CreationDate
+        +Date PlannedDate
         +Date CompletedDate
     }
 

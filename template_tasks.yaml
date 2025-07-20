@@ -42,8 +42,11 @@ tasks:
     Category: Cleaning/Thursday
     Priority: null
     Documentation: null
-    Frequency: Weekly
-    Last Completed: null
+    Frequency: Monthly
+    Last Completed:
+      start: '2025-07-20'
+      end: null
+      time_zone: null
     Task: Clean Primary Bathroom
 - id: 2300ac25-7c56-8023-a330-eb10bafe57fe
   properties:
@@ -55,9 +58,12 @@ tasks:
     Task: Review  Inventory List and identify missing items
 - id: 2300ac25-7c56-806b-813d-f88d80d62581
   properties:
-    Category: Random/Monday
-    Priority: Urgent
+    Category: null
+    Priority: Normal
     Documentation: null
-    Frequency: Weekly
-    Last Completed: null
+    Frequency: Monday/Thursday
+    Last Completed:
+      start: '2025-07-20'
+      end: null
+      time_zone: null
     Task: Check Cat Fountains
