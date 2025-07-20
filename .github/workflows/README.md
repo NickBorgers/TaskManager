@@ -2,18 +2,23 @@
 
 This workflow automatically builds and pushes Docker images to Docker Hub when you push to the main branch or create releases.
 
-## Required Secrets
+## Required Configuration
 
-You need to set up the following secrets in your GitHub repository:
+You need to set up the following in your GitHub repository:
 
 1. Go to your repository settings
 2. Navigate to "Secrets and variables" → "Actions"
-3. Add the following secrets:
 
-### DOCKER_HUB_USERNAME
+### Variables
+Add the following variable:
+
+#### DOCKER_HUB_USERNAME
 Your Docker Hub username (e.g., `nickborgers`)
 
-### DOCKER_HUB_PAT
+### Secrets
+Add the following secret:
+
+#### DOCKER_HUB_PAT
 Your Docker Hub Personal Access Token:
 1. Go to https://hub.docker.com/settings/security
 2. Click "New Access Token"
