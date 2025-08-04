@@ -392,6 +392,21 @@ def main():
                 properties["Planned Date"] = {"date": {"start": planned_date.isoformat()}}
                 notion.pages.create(parent={"database_id": ACTIVE_DB_ID}, properties=properties)
                 logger.info(f"Created Active Task for template id {template_task['id']} with Category {category} and Planned Date {planned_date}")
+        elif freq == "Daily":
+            # For daily tasks, create for all three workdays
+            for category, planned_date in week_dates.items():
+                if not is_task_due_for_week(template_task, week_start, planned_date):
+                    continue
+                if uncompleted_task_exists_for_date(template_task["id"], category, planned_date, active_schema):
+                    logger.info(f"Skipping creation for template id {template_task['id']} and category {category} for {planned_date} because uncompleted Active Task already exists.")
+                    continue
+                properties = build_active_task_properties(template_task, template_schema, active_schema)
+                if TEMPLATE_ID_PROPERTY in active_schema:
+                    properties[TEMPLATE_ID_PROPERTY] = {"rich_text": [{"text": {"content": template_task["id"]}}]}
+                properties["Category"] = {"select": {"name": category}}
+                properties["Planned Date"] = {"date": {"start": planned_date.isoformat()}}
+                notion.pages.create(parent={"database_id": ACTIVE_DB_ID}, properties=properties)
+                logger.info(f"Created Active Task for template id {template_task['id']} with Category {category} and Planned Date {planned_date}")
         else:
             # For other frequencies, match category to day
             for category, planned_date in week_dates.items():
