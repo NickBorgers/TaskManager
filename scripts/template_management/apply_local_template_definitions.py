@@ -23,6 +23,24 @@ with open("template_tasks.yaml", "r", encoding="utf-8") as f:
 schema = backup["schema"]
 tasks = backup["tasks"]
 
+def get_user_confirmation():
+    """Ask user for confirmation before proceeding with potentially destructive operations."""
+    print("\n" + "="*80)
+    print("⚠️  WARNING: This operation will sync local template definitions to the remote Notion database.")
+    print("   This may overwrite existing data in the remote database.")
+    print("="*80)
+    
+    while True:
+        response = input("\nDo you want to proceed? This action cannot be undone. (yes/no): ").strip().lower()
+        if response in ['yes', 'y']:
+            print("Proceeding with sync operation...")
+            return True
+        elif response in ['no', 'n']:
+            print("Operation cancelled by user.")
+            return False
+        else:
+            print("Please enter 'yes' or 'no'.")
+
 def get_current_schema(database_id):
     db = notion.databases.retrieve(database_id=database_id)
     return db["properties"]
@@ -91,6 +109,10 @@ def update_task(page_id, task, schema):
     print(f"Updated task: {page_id}")
 
 def main():
+    # Get user confirmation before proceeding
+    if not get_user_confirmation():
+        return
+    
     print("Syncing schema select options...")
     current_schema = get_current_schema(DATABASE_ID)
     add_missing_select_options(DATABASE_ID, schema, current_schema)

@@ -15,6 +15,8 @@ schema:
       color: red
     - name: Normal
       color: gray
+  Instructions:
+    type: rich_text
   Documentation:
     type: url
   Frequency:
@@ -37,10 +39,83 @@ schema:
   Task:
     type: title
 tasks:
+- id: 24c0ac25-7c56-8027-a384-fb29f9e25f33
+  properties:
+    Category: Random/Monday
+    Priority: Normal
+    Instructions: null
+    Documentation: null
+    Frequency: Weekly
+    Last Completed: null
+    Task: 'Whole House: Collect and breakdown empty cardboard boxes'
+- id: 24c0ac25-7c56-80a4-b966-efe45528b2eb
+  properties:
+    Category: Random/Monday
+    Priority: Normal
+    Instructions: Also ensure we have enough litter to refill. This task ends with
+      the litterbox out of operation because the liner is drying, to be refilled next
+      day.
+    Documentation: null
+    Frequency: Monthly
+    Last Completed:
+      start: '2025-07-28'
+      end: null
+      time_zone: null
+    Task: 'Hallway  Litterbox: Remove litter and wash liner'
+- id: 24c0ac25-7c56-80d4-915b-f501db9b990a
+  properties:
+    Category: Cooking/Tuesday
+    Priority: Normal
+    Instructions: null
+    Documentation: null
+    Frequency: Monthly
+    Last Completed:
+      start: '2025-07-29'
+      end: null
+      time_zone: null
+    Task: 'Hallway Litterbox: Refill with fresh litter'
+- id: 24c0ac25-7c56-8008-86b6-dc52f4f3effd
+  properties:
+    Category: Cooking/Tuesday
+    Priority: Normal
+    Instructions: null
+    Documentation: null
+    Frequency: Monthly
+    Last Completed:
+      start: '2025-08-12'
+      end: null
+      time_zone: null
+    Task: 'Laundry Room Litterbox: Refill with fresh litter'
+- id: 24c0ac25-7c56-8064-b3ca-e88356622c62
+  properties:
+    Category: Random/Monday
+    Priority: Normal
+    Instructions: Also ensure we have enough litter to refill. This task ends with
+      the litterbox out of operation because the liner is drying, to be refilled next
+      day.
+    Documentation: null
+    Frequency: Monthly
+    Last Completed:
+      start: '2025-08-11'
+      end: null
+      time_zone: null
+    Task: 'Laundry Room Litterbox: Remove litter and wash liner'
+- id: 2460ac25-7c56-8081-81e3-c56ceb38a298
+  properties:
+    Category: Cleaning/Thursday
+    Priority: Normal
+    Instructions: Wipe down all surfaces with a slightly damp cloth/rag. Use glass
+      cleaner and lint free cloth to clean windshield and other window interiors.
+      Vacuum seats and floor mats.
+    Documentation: null
+    Frequency: Monthly
+    Last Completed: null
+    Task: Clean car interior
 - id: 2450ac25-7c56-80e9-ac2c-ef38b39e1ddb
   properties:
     Category: Cleaning/Thursday
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Quarterly
     Last Completed: null
@@ -49,6 +124,7 @@ tasks:
   properties:
     Category: Cleaning/Thursday
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Quarterly
     Last Completed: null
@@ -57,6 +133,7 @@ tasks:
   properties:
     Category: Cleaning/Thursday
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Quarterly
     Last Completed: null
@@ -65,30 +142,43 @@ tasks:
   properties:
     Category: null
     Priority: Normal
+    Instructions: null
     Documentation: https://www.notion.so/Breakfast-2450ac257c5680be9552f079c4f26dce?source=copy_link
     Frequency: Daily
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
     Task: Make breakfast
 - id: 2450ac25-7c56-80f8-a43f-e0dded65accf
   properties:
     Category: Cleaning/Thursday
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Weekly
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
     Task: Ensure all laundry is folded and put away
 - id: 2450ac25-7c56-809e-9233-d7e28358abf3
   properties:
     Category: null
     Priority: Normal
+    Instructions: null
     Documentation: https://docs.google.com/document/d/1B8d6cNKT9ICGc-CIKYk42UST8vFFAZhVDfa64r4dPGM/edit?tab=t.0
     Frequency: Daily
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
     Task: Run at least one load of laundry
 - id: 2450ac25-7c56-8032-a8fb-f9e4ebf1f320
   properties:
     Category: Cleaning/Thursday
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Quarterly
     Last Completed: null
@@ -97,6 +187,7 @@ tasks:
   properties:
     Category: Cleaning/Thursday
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Quarterly
     Last Completed: null
@@ -105,6 +196,7 @@ tasks:
   properties:
     Category: Cleaning/Thursday
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Quarterly
     Last Completed: null
@@ -113,6 +205,7 @@ tasks:
   properties:
     Category: Cleaning/Thursday
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Quarterly
     Last Completed: null
@@ -121,6 +214,7 @@ tasks:
   properties:
     Category: Cleaning/Thursday
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Quarterly
     Last Completed: null
@@ -129,6 +223,7 @@ tasks:
   properties:
     Category: Cleaning/Thursday
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Monthly
     Last Completed: null
@@ -137,376 +232,540 @@ tasks:
   properties:
     Category: Cleaning/Thursday
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Weekly
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
     Task: 'Kitchen: Clean cat fountains - disassemble and brush fountain pump and
       basin'
 - id: 2450ac25-7c56-8034-b562-c38a9c3c5ba7
   properties:
     Category: Cleaning/Thursday
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Weekly
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
     Task: 'Nick office: Early morning: Vacuum'
 - id: 2450ac25-7c56-807d-ae51-fb383c0a2ca8
   properties:
     Category: Cleaning/Thursday
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Weekly
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
     Task: 'Caroline office: Early morning: Vacuum'
 - id: 2450ac25-7c56-8030-bc9a-dcb213581845
   properties:
     Category: Cleaning/Thursday
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Weekly
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
     Task: 'Front room (former office): Dust/wipe down surfaces'
 - id: 2450ac25-7c56-8034-8714-fa9e8cfd471f
   properties:
     Category: Cleaning/Thursday
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Weekly
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
     Task: 'Nick office: Early morning: Dust/wipe down surfaces'
 - id: 2450ac25-7c56-80c1-b5fb-c2f6cd730dcb
   properties:
     Category: Cleaning/Thursday
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Weekly
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
     Task: 'Caroline office: Early morning: Dust/wipe down surfaces'
 - id: 2450ac25-7c56-8083-af09-ebbd586d79c9
   properties:
     Category: Cleaning/Thursday
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Weekly
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
     Task: 'Primary bedroom: Dust/wipe down surfaces'
 - id: 2450ac25-7c56-80a1-809d-c0b5c139fcbe
   properties:
     Category: Cleaning/Thursday
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Weekly
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
     Task: 'Primary bedroom: Change and wash sheets'
 - id: 2450ac25-7c56-8065-8d65-dc2eb912fc08
   properties:
     Category: Cleaning/Thursday
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Weekly
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
     Task: 'Half guest bathroom: Replace and wash hand towels'
 - id: 2450ac25-7c56-801e-98b6-f78390a0c3b5
   properties:
     Category: Cleaning/Thursday
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Monthly
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
     Task: 'Half guest bathroom: Mop floor (steam mop if helpful)'
 - id: 2450ac25-7c56-80e2-a1bc-e4d6d46ff847
   properties:
     Category: Cleaning/Thursday
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Monthly
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
     Task: 'Full guest bathroom: Mop floor (steam mop if helpful)'
 - id: 2450ac25-7c56-80fc-b7b7-c5133b4fe91b
   properties:
     Category: Cleaning/Thursday
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Monthly
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
     Task: 'Full guest bathroom: Clean shower, tub, and glass'
 - id: 2450ac25-7c56-806c-8706-e7446bb66464
   properties:
     Category: Cleaning/Thursday
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Weekly
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
     Task: 'Half guest bathroom: Clean sinks, mirror, toilets, door handles'
 - id: 2450ac25-7c56-80d3-a838-cacdee89fdef
   properties:
     Category: Cleaning/Thursday
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Weekly
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
     Task: 'Full guest bathroom: Replace and wash all hand towels, wash cloths etc.'
 - id: 2450ac25-7c56-802e-892d-ede41df762cd
   properties:
     Category: Cleaning/Thursday
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Weekly
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
     Task: 'Full guest bathroom: Clean sinks, mirror, toilets, door handles'
 - id: 2450ac25-7c56-801f-ac03-e1ab174378fe
   properties:
     Category: Cleaning/Thursday
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Monthly
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
     Task: 'Primary bathroom: Clean shower'
 - id: 2450ac25-7c56-8094-9e4a-e02e3034ab5b
   properties:
     Category: Cleaning/Thursday
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Monthly
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
     Task: 'Primary bathroom: Mop floor (steam mop if helpful)'
 - id: 2450ac25-7c56-80b0-bc6e-d0c6d1ad7f52
   properties:
     Category: Cleaning/Thursday
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Weekly
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
     Task: 'Primary bathroom: Clean sinks, mirror, toilets, door handles'
 - id: 2450ac25-7c56-80d2-a40e-d3e34026c551
   properties:
     Category: Cleaning/Thursday
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Weekly
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
     Task: 'Living Spaces: Check for spots/stains and wipe or spot clean with Folex'
 - id: 2450ac25-7c56-80a8-81bb-df975081623b
   properties:
     Category: Cleaning/Thursday
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Weekly
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
     Task: 'Primary bathroom: Replace and wash all hand towels, wash cloths etc.'
 - id: 2450ac25-7c56-8097-9fce-e1f4c26bfaef
   properties:
     Category: Cleaning/Thursday
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Weekly
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
     Task: 'Living Spaces: Dust/wipe down surfaces'
 - id: 2450ac25-7c56-808b-8c14-c2a39dfc9f58
   properties:
     Category: null
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Daily
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
     Task: 'Living Spaces: Tidy up'
 - id: 2450ac25-7c56-8072-864d-dd7599a779a8
   properties:
     Category: null
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Daily
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
     Task: 'Living Spaces: Fold couch blankets'
 - id: 2450ac25-7c56-80ff-af0e-f2e7ac951cae
   properties:
     Category: Cleaning/Thursday
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Quarterly
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
     Task: 'Kitchen: Clean backsplash and cabinets'
 - id: 2450ac25-7c56-806e-ac3b-c71910a6adde
   properties:
     Category: Cleaning/Thursday
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Quarterly
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
     Task: 'Kitchen: Clean any spills in oven'
 - id: 2450ac25-7c56-80d9-8db7-d707b3574065
   properties:
     Category: Cooking/Tuesday
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Weekly
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-05'
+      end: null
+      time_zone: null
     Task: 'Kitchen: Clean out / organize fridge'
 - id: 2450ac25-7c56-8038-a25a-eab8f9e4bd8d
   properties:
     Category: Cleaning/Thursday
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Weekly
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
     Task: 'Whole house: Vacuum all floors'
 - id: 2450ac25-7c56-808a-b4cc-e9c4f5efc167
   properties:
     Category: Cleaning/Thursday
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Weekly
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
     Task: 'Common areas: Mop all floors'
 - id: 2450ac25-7c56-8011-8d4e-d23d3808a4bc
   properties:
     Category: Cleaning/Thursday
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Monthly
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
     Task: 'Kitchen: Wipe down front of appliances with stainless steel cleaner'
 - id: 2450ac25-7c56-80f1-8d88-c25fe7f5cf1d
   properties:
     Category: Cleaning/Thursday
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Weekly
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
     Task: 'Kitchen: Wipe down all cabinet, stove, fridge, and drawer handles'
 - id: 2450ac25-7c56-800c-9fb2-e2d02bee39a8
   properties:
     Category: Cleaning/Thursday
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Weekly
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
     Task: 'Kitchen: Run cleaning cycle on Nespresso'
 - id: 2450ac25-7c56-80a4-9ef1-ffd98702f4c9
   properties:
     Category: Cleaning/Thursday
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Monthly
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
     Task: 'Kitchen: Clean toaster oven interior'
 - id: 2450ac25-7c56-809b-8b04-c5eeb5d93a32
   properties:
     Category: Cleaning/Thursday
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Weekly
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
     Task: 'Kitchen: Clean microwave interior'
 - id: 2450ac25-7c56-8057-9276-d17ebc8db57c
   properties:
     Category: null
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Monday/Thursday
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
     Task: 'Vacuum robot: empty dirty water and refill clean water'
 - id: 2450ac25-7c56-80d1-a4af-c16c50979d33
   properties:
     Category: null
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Daily
-    Last Completed: null
-    Task: 'Kitchen: If any, hand wash any items as needed (e.g. air fryer parts)'
-- id: 2450ac25-7c56-80d5-a8de-dc8965b251d2
-  properties:
-    Category: null
-    Priority: Normal
-    Documentation: null
-    Frequency: Daily
-    Last Completed: null
-    Task: 'Kitchen: Load dishes in dishwasher, and start'
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
+    Task: 'Kitchen: If any, hand wash any items as needed (e.g. air fryer trays)'
 - id: 2450ac25-7c56-8041-a9ff-e2547e529c64
   properties:
     Category: null
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Daily
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
     Task: 'Whole house: Collect dishes/cups and bring to dishwasher'
 - id: 2450ac25-7c56-8047-a89a-ecb1d541661e
   properties:
     Category: Cooking/Tuesday
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Weekly
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
     Task: 'Whole house: Empty all small trash bins'
 - id: 2450ac25-7c56-80f3-a711-c261e3fe2e30
   properties:
     Category: Cooking/Tuesday
     Priority: Urgent
+    Instructions: null
     Documentation: null
     Frequency: Weekly
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
     Task: Take trash out
 - id: 2360ac25-7c56-8064-a679-dfae158d755a
   properties:
     Category: null
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Monday/Thursday
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
     Task: Fold Couch blankets and tidy
-- id: 2360ac25-7c56-808f-9691-f26c5dd0a94f
-  properties:
-    Category: null
-    Priority: Normal
-    Documentation: null
-    Frequency: Daily
-    Last Completed: null
-    Task: 'Kitchen: Vacuum tile floor'
 - id: 2360ac25-7c56-80cb-8a15-da97b9a8882b
   properties:
     Category: null
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Daily
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
     Task: 'Kitchen: Empty sink strainer, scrub and rinse sink with dish soap'
 - id: 2360ac25-7c56-802b-ae3b-caa1d55e55ea
   properties:
     Category: null
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Daily
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
     Task: 'Kitchen: Load and start dishwasher if needed'
 - id: 2360ac25-7c56-8041-8c93-d58c84cc152a
   properties:
     Category: null
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Monday/Thursday
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
     Task: Scoop litter
 - id: 2360ac25-7c56-8063-b8f2-e66238716ee1
   properties:
     Category: null
     Priority: Normal
+    Instructions: null
     Documentation: null
     Frequency: Daily
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
     Task: 'Kitchen: Wipe down counters and table'
 - id: 2300ac25-7c56-8023-a330-eb10bafe57fe
   properties:
     Category: Cooking/Tuesday
     Priority: Normal
+    Instructions: null
     Documentation: https://docs.google.com/document/d/1B8d6cNKT9ICGc-CIKYk42UST8vFFAZhVDfa64r4dPGM/edit?tab=t.inn7zf4o2gbs
     Frequency: Weekly
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-06'
+      end: null
+      time_zone: null
     Task: Review Inventory List and identify missing items
 - id: 2300ac25-7c56-806b-813d-f88d80d62581
   properties:
-    Category: null
+    Category: Random/Monday
     Priority: Normal
+    Instructions: null
     Documentation: null
-    Frequency: Monday/Thursday
-    Last Completed: null
+    Frequency: Weekly
+    Last Completed:
+      start: '2025-08-10'
+      end: null
+      time_zone: null
     Task: Check Cat Fountains, refill with filtered water
