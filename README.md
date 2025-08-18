@@ -22,16 +22,11 @@ The system consists of two Notion databases:
 
 ## Architecture
 
-```
-Template Tasks (Notion DB)
-├── Task definitions with frequency, category, last completed date
-└── Schema with select options for Category, Frequency, Status
+For detailed information about the system architecture, execution flow, and component relationships, see [design.md](design.md).
 
-Active Tasks (Notion DB)
-├── Generated actionable tasks with planned dates
-├── Status tracking (Not Started, In Progress, Complete)
-└── Links back to template tasks via TemplateId property
-```
+The system consists of two Notion databases:
+- **Template Tasks**: Stores recurring task definitions with frequency, category, and completion tracking
+- **Active Tasks**: Contains actionable tasks generated from templates with planned dates and status tracking
 
 ## How was this built?
 This was built pretty much entirely with vibe coding using [Cursor's IDE](https://cursor.com/?from=home). It was my first time using such a tool, and the fact I could produce this in less than 3 hours is... pretty wild. I did need to jump in and fix mistakes it made, and this included running a debugger to see the actual objects available and how to make sense of them. I could not have done this without my prior skills; though I also could not have used my skills to deliver so much so quickly.
@@ -211,10 +206,19 @@ This allows the same task template to be scheduled for both themed days.
 
 ## Scripts
 
-### Main Scripts
+### Runtime Scripts
+
+These scripts are part of the continuous runtime system:
 
 - `scripts/weekly_rollover/create_active_tasks_from_templates.py`: Main script for generating weekly tasks
 - `scripts/scheduler.py`: Scheduler that runs task generation weekly on Fridays at 9:00 AM
+
+### Utility Scripts
+
+These scripts are for setup, maintenance, and backup operations (not part of the runtime system):
+
+- `scripts/template_management/copy_template_definitions.py`: Exports template tasks to local YAML for backup
+- `scripts/template_management/apply_local_template_definitions.py`: Applies local template definitions to Notion
 
 ### Configuration
 
