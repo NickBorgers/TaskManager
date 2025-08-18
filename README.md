@@ -308,6 +308,48 @@ logging.basicConfig(level=logging.DEBUG)
 4. Add tests if applicable
 5. Submit a pull request
 
+## Releases
+
+This project follows [Semantic Versioning](https://semver.org/) for releases. To create a new release:
+
+### Release Process
+
+1. **Ensure all changes are committed and pushed to main branch**
+2. **Create and push a new tag**:
+   ```bash
+   # For a patch release (bug fixes)
+   git tag -a v1.2.2 -m "Fix: brief description of the fix"
+   
+   # For a minor release (new features, backward compatible)
+   git tag -a v1.3.0 -m "Feature: brief description of new feature"
+   
+   # For a major release (breaking changes)
+   git tag -a v2.0.0 -m "Breaking: brief description of breaking changes"
+   ```
+
+3. **Push the tag to trigger automated builds**:
+   ```bash
+   git push origin v1.3.0
+   ```
+
+4. **Verify the release**:
+   - Check that the GitHub Actions workflow builds and pushes the Docker image
+   - Verify the new Docker image is available on Docker Hub
+   - Update any deployment configurations to use the new version
+
+### Version Guidelines
+
+- **Patch (1.2.1 → 1.2.2)**: Bug fixes and minor improvements
+- **Minor (1.2.1 → 1.3.0)**: New features that are backward compatible
+- **Major (1.2.1 → 2.0.0)**: Breaking changes or major architectural changes
+
+### Automated Release Process
+
+When a tag is pushed, the GitHub Actions workflow automatically:
+1. Builds the Docker image for multiple platforms (linux/amd64, linux/arm64)
+2. Pushes the image to Docker Hub with appropriate tags
+3. Creates a `latest` tag for the most recent version
+
 ## License
 
 [Add your license information here]
