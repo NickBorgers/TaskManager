@@ -16,7 +16,8 @@ The system consists of two Notion databases:
 - **Completion Tracking**: Automatically update template completion dates based on active task status
 - **Duplicate Prevention**: Avoid creating duplicate active tasks
 - **Live Notion Integration**: Direct API integration for real-time updates
-- **Automated Scheduling**: Built-in scheduler runs weekly on Fridays at 9:00 AM
+- **Automated Scheduling**: Built-in scheduler runs weekly on Fridays at 9:00 AM and daily at 6:00 AM
+- **Daily Planned Date Review**: Automatically sets planned dates for active tasks that lack them (sets to Thursday of next week)
 - **Continuous Operation**: Container runs continuously and handles its own scheduling
 - **First-Run Execution**: Automatically runs task generation on first container startup regardless of day
 
@@ -141,6 +142,29 @@ export NOTION_INTEGRATION_TOKEN="your_integration_token_here"
 
 The system automatically generates tasks for the coming week every Friday at 9:00 AM. On first startup, it will run immediately regardless of the day to ensure tasks are generated for the current week.
 
+### Daily Planned Date Review
+
+The system automatically reviews active tasks every day at 6:00 AM and sets planned dates for tasks that lack them. This functionality:
+
+- **Identifies Active Tasks**: Finds tasks that are active (not completed) and don't have a planned date
+- **Excludes Template Tasks**: Only processes manually created tasks (those without a TemplateId)
+- **Sets Planned Dates**: Assigns the Thursday of the coming week as the planned date
+- **Ensures Visibility**: Helps ensure all desired tasks show up in the worker's view
+
+#### Manual Run (Local Development)
+```bash
+python scripts/daily_planned_date_review.py
+```
+
+#### Manual Run (Docker)
+```bash
+docker run --rm \
+  -v $(pwd)/notion_config.yaml:/app/notion_config.yaml:ro \
+  -e NOTION_INTEGRATION_TOKEN="your_integration_token_here" \
+  notion-home-task-manager \
+  python scripts/daily_planned_date_review.py
+```
+
 #### Manual Run (Local Development)
 ```bash
 python scripts/weekly_rollover/create_active_tasks_from_templates.py
@@ -211,7 +235,8 @@ This allows the same task template to be scheduled for both themed days.
 These scripts are part of the continuous runtime system:
 
 - `scripts/weekly_rollover/create_active_tasks_from_templates.py`: Main script for generating weekly tasks
-- `scripts/scheduler.py`: Scheduler that runs task generation weekly on Fridays at 9:00 AM
+- `scripts/daily_planned_date_review.py`: Daily script for setting planned dates on active tasks
+- `scripts/scheduler.py`: Scheduler that runs task generation weekly on Fridays at 9:00 AM and daily review at 6:00 AM
 
 ### Utility Scripts
 

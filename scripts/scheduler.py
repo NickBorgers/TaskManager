@@ -16,6 +16,7 @@ import pytz
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from scripts.weekly_rollover.create_active_tasks_from_templates import main as run_task_generation
+from scripts.daily_planned_date_review import main as run_daily_planned_date_review
 
 # Configure logging
 logging.basicConfig(
@@ -38,11 +39,27 @@ def run_weekly_tasks():
         logger.error(f"Error during weekly task generation: {e}")
         # Don't raise the exception to keep the scheduler running
 
+def run_daily_planned_date_review():
+    """Run the daily planned date review"""
+    try:
+        logger.info("Starting daily planned date review...")
+        run_daily_planned_date_review()
+        logger.info("Daily planned date review completed successfully")
+    except Exception as e:
+        logger.error(f"Error during daily planned date review: {e}")
+        # Don't raise the exception to keep the scheduler running
+
 def schedule_weekly_run():
     """Schedule the weekly run for Friday at 9:00 AM"""
     # Schedule for Friday at 9:00 AM
     schedule.every().friday.at("09:00").do(run_weekly_tasks)
     logger.info("Scheduled weekly task generation for Friday at 9:00 AM")
+
+def schedule_daily_run():
+    """Schedule the daily planned date review for 6:00 AM every day"""
+    # Schedule for 6:00 AM every day
+    schedule.every().day.at("06:00").do(run_daily_planned_date_review)
+    logger.info("Scheduled daily planned date review for 6:00 AM every day")
 
 def is_first_run():
     """Check if this is the first time the container is running"""
@@ -83,6 +100,17 @@ def run_immediately_if_needed():
     else:
         logger.info(f"Not Friday. Current day: {now.strftime('%A')}")
 
+def run_daily_review_immediately_if_needed():
+    """Run daily review immediately if it's past 6:00 AM and hasn't been run today"""
+    now = datetime.now(pytz.UTC)
+    
+    # Check if it's past 6:00 AM
+    if now.hour >= 6:
+        logger.info("It's past 6:00 AM - running daily planned date review immediately")
+        run_daily_planned_date_review()
+    else:
+        logger.info(f"It's before 6:00 AM. Current time: {now.strftime('%Y-%m-%d %H:%M:%S %Z')}")
+
 def main():
     """Main scheduler function"""
     logger.info("Starting Notion Home Task Manager Scheduler")
@@ -90,8 +118,14 @@ def main():
     # Check if we should run immediately
     run_immediately_if_needed()
     
+    # Check if we should run daily review immediately
+    run_daily_review_immediately_if_needed()
+    
     # Schedule the weekly run
     schedule_weekly_run()
+    
+    # Schedule the daily run
+    schedule_daily_run()
     
     logger.info("Scheduler is running. Press Ctrl+C to stop.")
     
