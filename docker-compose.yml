@@ -20,4 +20,23 @@ services:
     # Run continuously with restart policy
     restart: unless-stopped
     # For development, you can override the command to run once
-    # command: ["python", "scripts/weekly_rollover/create_active_tasks_from_templates.py"] 
+    # command: ["python", "scripts/weekly_rollover/create_active_tasks_from_templates.py"]
+
+  test:
+    build:
+      context: .
+      target: test
+    image: nickborgers/notion-home-task-manager:test
+    container_name: notion-home-task-manager-test
+    volumes:
+      # Mount test coverage reports
+      - ./htmlcov:/app/htmlcov
+      # Mount tests directory for development
+      - ./tests:/app/tests:ro
+    environment:
+      - PYTHONUNBUFFERED=1
+      - NOTION_INTEGRATION_SECRET=test-token
+    # Run tests and exit
+    command: ["pytest", "tests/", "-v", "--cov=scripts", "--cov-report=term-missing", "--cov-report=html:htmlcov"]
+    profiles:
+      - test 

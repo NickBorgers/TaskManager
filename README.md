@@ -1,5 +1,10 @@
 # Home TaskManager
 
+[![Tests](https://img.shields.io/github/actions/workflow/status/NickBorgers/notion-home-task-manager/test.yml?branch=main&style=flat-square&logo=pytest)](https://github.com/NickBorgers/notion-home-task-manager/actions)
+[![Coverage](https://img.shields.io/badge/coverage-68%25-brightgreen?style=flat-square&logo=codecov)](https://github.com/NickBorgers/notion-home-task-manager/actions)
+[![Docker](https://img.shields.io/badge/docker-available-blue?style=flat-square&logo=docker)](https://hub.docker.com/)
+[![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)](LICENSE)
+
 A comprehensive task management system for household employees, built with Notion databases and Python automation. This system manages recurring tasks with themed workdays (Random/Errands on Monday, Cooking on Tuesday, Cleaning on Thursday) and automatically generates actionable tasks for the coming week.
 
 ## Overview
@@ -17,7 +22,7 @@ The system consists of two Notion databases:
 - **Duplicate Prevention**: Avoid creating duplicate active tasks
 - **Live Notion Integration**: Direct API integration for real-time updates
 - **Automated Scheduling**: Built-in scheduler runs weekly on Fridays at 9:00 AM and daily at 6:00 AM
-- **Daily Planned Date Review**: Automatically sets planned dates for active tasks that lack them (sets to Thursday of next week)
+- **Daily Planned Date Review**: Automatically sets planned dates for active tasks that lack them, assigns categories to uncategorized tasks, and reschedules old incomplete tasks (sets to Thursday of next week)
 - **Continuous Operation**: Container runs continuously and handles its own scheduling
 - **First-Run Execution**: Automatically runs task generation on first container startup regardless of day
 
@@ -144,12 +149,25 @@ The system automatically generates tasks for the coming week every Friday at 9:0
 
 ### Daily Planned Date Review
 
-The system automatically reviews active tasks every day at 6:00 AM and sets planned dates for tasks that lack them. This functionality:
+The system automatically reviews active tasks every day at 6:00 AM and performs three types of maintenance:
 
-- **Identifies Active Tasks**: Finds tasks that are active (not completed) and don't have a planned date
-- **Excludes Template Tasks**: Only processes manually created tasks (those without a TemplateId)
-- **Sets Planned Dates**: Assigns the Thursday of the coming week as the planned date
-- **Ensures Visibility**: Helps ensure all desired tasks show up in the worker's view
+1. **Tasks Without Planned Dates**: 
+   - Finds tasks that are active (not completed) and don't have a planned date
+   - Excludes template tasks (those with a TemplateId)
+   - Sets planned dates to the Thursday of the coming week
+   - Ensures all desired tasks show up in the worker's view
+
+2. **Tasks Without Categories**:
+   - Finds tasks that are active and don't have a category assigned
+   - Excludes template tasks (those with a TemplateId)
+   - Assigns "Random/Monday" category (default for tasks that don't fit specific days)
+   - Ensures all tasks have proper categorization
+
+3. **Old Incomplete Tasks**:
+   - Finds tasks that have a planned date in the past but are still incomplete
+   - Excludes template tasks (those with a TemplateId)
+   - Sets planned dates to the Thursday of the coming week
+   - Ensures forgotten/missed tasks eventually get completed
 
 #### Manual Run (Local Development)
 ```bash
@@ -252,6 +270,83 @@ These scripts are for setup, maintenance, and backup operations (not part of the
 - `Dockerfile`: Docker container configuration
 - `docker-compose.yml`: Docker Compose configuration for easy deployment
 
+## Testing
+
+This project uses a **containerized testing approach** that ensures consistent, isolated, and reliable testing without requiring external dependencies like the Notion API.
+
+### 🧪 Test Coverage
+
+The test suite provides comprehensive coverage of the `daily_planned_date_review.py` script:
+
+- **Unit Tests**: Date calculations, configuration validation, schema retrieval
+- **Integration Tests**: Task queries, task updates, API interactions
+- **Edge Cases**: Large datasets, error scenarios, date boundaries
+- **Performance Tests**: Load testing and resource usage monitoring
+
+### 🚀 Running Tests
+
+#### Quick Start (Recommended)
+```bash
+./run_tests_container.sh
+```
+
+#### Using Docker Compose
+```bash
+docker-compose --profile test up test --build --abort-on-container-exit
+```
+
+#### Run Specific Tests
+```bash
+# Unit tests only
+docker run --rm notion-home-task-manager:test pytest tests/ -m unit
+
+# Specific test by name
+docker run --rm notion-home-task-manager:test pytest tests/ -k "test_get_thursday"
+
+# With verbose output
+docker run --rm notion-home-task-manager:test pytest tests/ -v
+```
+
+### 📊 Coverage Reports
+
+After running tests, coverage reports are generated in:
+- **HTML Report**: `htmlcov/index.html` (detailed coverage breakdown)
+- **Terminal Output**: Coverage summary in console
+- **XML Report**: `coverage.xml` (for CI/CD integration)
+
+### 🐳 Containerized Testing Benefits
+
+- **No Local Setup**: No Python installation or virtual environment required
+- **Isolated Environment**: Tests run in Docker containers with consistent dependencies
+- **No External Dependencies**: All Notion API calls are mocked
+- **CI/CD Ready**: Same environment locally and in continuous integration
+- **Reproducible Results**: Tests always run in the same environment
+
+### 📁 Test Structure
+
+```
+tests/
+├── test_daily_planned_date_review.py  # Main test file with all test cases
+└── conftest.py                        # Pytest configuration and fixtures
+
+Docker/
+├── Dockerfile                         # Multi-stage with test target
+├── docker-compose.yml                 # Test service configuration
+└── run_tests_container.sh             # Containerized test runner
+
+CI/CD/
+└── .github/workflows/test.yml         # GitHub Actions workflow
+```
+
+### 🔧 Test Configuration
+
+- **Environment Variables**: All mocked (no `NOTION_INTEGRATION_SECRET` required)
+- **External APIs**: Notion API calls mocked with `unittest.mock`
+- **Date/Time**: Uses `freezegun` for consistent date testing
+- **Coverage**: Automatically generates HTML and XML reports
+
+For detailed testing documentation, see [TESTING.md](TESTING.md).
+
 ## Dependencies
 
 - `notion-client`: Notion API integration
@@ -305,8 +400,30 @@ logging.basicConfig(level=logging.DEBUG)
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
-4. Add tests if applicable
+4. **Add tests if applicable** - Run the test suite to ensure your changes work correctly
 5. Submit a pull request
+
+### Development Workflow
+
+1. **Run tests before making changes**:
+   ```bash
+   ./run_tests_container.sh
+   ```
+
+2. **Add new tests for new functionality**:
+   - Add test functions to `tests/test_daily_planned_date_review.py`
+   - Use appropriate pytest markers (`@pytest.mark.unit`, `@pytest.mark.integration`)
+   - Mock any external dependencies
+
+3. **Ensure all tests pass**:
+   ```bash
+   docker run --rm notion-home-task-manager:test pytest tests/ -v
+   ```
+
+4. **Check coverage**:
+   ```bash
+   docker run --rm notion-home-task-manager:test pytest tests/ --cov=scripts --cov-report=term-missing
+   ```
 
 ## Releases
 
