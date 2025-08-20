@@ -51,6 +51,10 @@ coverage.xml
 .pytest_cache/
 cover/
 
+# Containerized testing artifacts
+test-results/
+.pytest_cache/
+
 # Translations
 *.mo
 *.pot
