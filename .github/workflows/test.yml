@@ -27,39 +27,4 @@ jobs:
           -v $(pwd)/coverage.xml:/app/coverage.xml \
           notion-home-task-manager:test \
           pytest tests/ -v --cov=scripts --cov-report=term-missing --cov-report=html:htmlcov --cov-report=xml
-          
-    - name: Extract coverage percentage
-      run: |
-        # Extract coverage percentage from XML for summary
-        COVERAGE=$(python -c "
-        import xml.etree.ElementTree as ET
-        tree = ET.parse('coverage.xml')
-        root = tree.getroot()
-        coverage = root.get('line-rate')
-        print(f'{float(coverage) * 100:.1f}')
-        ")
-        echo "COVERAGE_PERCENTAGE=$COVERAGE" >> $GITHUB_ENV
-        echo "Coverage: $COVERAGE%"
-        
-    - name: Upload coverage reports to Codecov
-      uses: codecov/codecov-action@v3
-      with:
-        file: ./coverage.xml
-        flags: unittests
-        name: codecov-umbrella
-        fail_ci_if_error: false
-        
-    - name: Upload coverage report as artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: coverage-report
-        path: htmlcov/
-        retention-days: 30
-        
-    - name: Test summary
-      run: |
-        echo "## Test Results" >> $GITHUB_STEP_SUMMARY
-        echo "✅ All tests completed successfully" >> $GITHUB_STEP_SUMMARY
-        echo "📊 Coverage: ${COVERAGE_PERCENTAGE}%" >> $GITHUB_STEP_SUMMARY
-        echo "🐳 Tests ran in containerized environment" >> $GITHUB_STEP_SUMMARY
 
