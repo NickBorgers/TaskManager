@@ -1,7 +1,6 @@
 # Home TaskManager
 
 [![Tests](https://img.shields.io/github/actions/workflow/status/NickBorgers/notion-home-task-manager/test.yml?branch=main&style=flat-square&logo=pytest)](https://github.com/NickBorgers/notion-home-task-manager/actions)
-[![Coverage](https://img.shields.io/badge/coverage-68%25-brightgreen?style=flat-square&logo=codecov)](https://github.com/NickBorgers/notion-home-task-manager/actions)
 [![Docker](https://img.shields.io/badge/docker-available-blue?style=flat-square&logo=docker)](https://hub.docker.com/)
 [![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)](LICENSE)
 
