@@ -26,5 +26,5 @@ jobs:
           -v $(pwd)/htmlcov:/app/htmlcov \
           -v $(pwd)/coverage.xml:/app/coverage.xml \
           notion-home-task-manager:test \
-          pytest tests/ -v --cov=scripts --cov-report=term-missing --cov-report=html:htmlcov --cov-report=xml
+          pytest tests/ -v
 
