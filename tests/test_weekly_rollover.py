@@ -614,6 +614,66 @@ class TestTaskDueForWeek:
         result = is_task_due_for_week(template_task, week_start, planned_date)
         assert result is False
 
+    def test_is_task_due_for_week_monthly_last_completed_before_month(self):
+        """Test monthly task due for week when completed before month start"""
+        template_task = {
+            "properties": {
+                "Frequency": "Monthly",
+                "Category": "Random/Monday",
+                "Last Completed": {"start": "2023-12-15"}
+            }
+        }
+        week_start = date(2024, 1, 22)
+        planned_date = date(2024, 1, 22)
+        
+        result = is_task_due_for_week(template_task, week_start, planned_date)
+        assert result is True
+    
+    def test_is_task_due_for_week_monthly_last_completed_in_month(self):
+        """Test monthly task due for week when completed during the past month"""
+        template_task = {
+            "properties": {
+                "Frequency": "Monthly",
+                "Category": "Random/Monday",
+                "Last Completed": {"start": "2023-12-31"}
+            }
+        }
+        week_start = date(2024, 1, 22)
+        planned_date = date(2024, 1, 25)
+        
+        result = is_task_due_for_week(template_task, week_start, planned_date)
+        assert result is False
+
+    def test_is_task_due_for_week_quarterly_last_completed_before_quarter(self):
+        """Test quarterly task due for week when completed before quarter start"""
+        template_task = {
+            "properties": {
+                "Frequency": "Quarterly",
+                "Category": "Random/Monday",
+                "Last Completed": {"start": "2023-09-15"}
+            }
+        }
+        week_start = date(2024, 1, 22)
+        planned_date = date(2024, 1, 22)
+        
+        result = is_task_due_for_week(template_task, week_start, planned_date)
+        assert result is True
+    
+    def test_is_task_due_for_week_quarterly_last_completed_in_quarter(self):
+        """Test quarterly task due for week when completed during the past quarter"""
+        template_task = {
+            "properties": {
+                "Frequency": "Quarterly",
+                "Category": "Random/Monday",
+                "Last Completed": {"start": "2023-11-30"}
+            }
+        }
+        week_start = date(2024, 1, 22)
+        planned_date = date(2024, 1, 25)
+        
+        result = is_task_due_for_week(template_task, week_start, planned_date)
+        assert result is False
+
 class TestUncompletedTaskExistence:
     """Test uncompleted task existence checking"""
     
