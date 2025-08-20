@@ -382,8 +382,9 @@ def main():
                     continue
                 if not is_task_due_for_week(template_task, week_start, planned_date):
                     continue
+                task_name = template_task["properties"].get("Task", "Unknown Task")
                 if uncompleted_task_exists_for_date(template_task["id"], category, planned_date, active_schema):
-                    logger.info(f"Skipping creation for template id {template_task['id']} and category {category} for {planned_date} because uncompleted Active Task already exists.")
+                    logger.info(f"Skipping creation for template id {template_task['id']} ('{task_name}') and category {category} for {planned_date} because uncompleted Active Task already exists.")
                     continue
                 properties = build_active_task_properties(template_task, template_schema, active_schema)
                 if TEMPLATE_ID_PROPERTY in active_schema:
@@ -391,14 +392,15 @@ def main():
                 properties["Category"] = {"select": {"name": category}}
                 properties["Planned Date"] = {"date": {"start": planned_date.isoformat()}}
                 notion.pages.create(parent={"database_id": ACTIVE_DB_ID}, properties=properties)
-                logger.info(f"Created Active Task for template id {template_task['id']} with Category {category} and Planned Date {planned_date}")
+                logger.info(f"Created Active Task '{task_name}' for template id {template_task['id']} with Category {category} and Planned Date {planned_date}")
         elif freq == "Daily":
             # For daily tasks, create for all three workdays
             for category, planned_date in week_dates.items():
                 if not is_task_due_for_week(template_task, week_start, planned_date):
                     continue
+                task_name = template_task["properties"].get("Task", "Unknown Task")
                 if uncompleted_task_exists_for_date(template_task["id"], category, planned_date, active_schema):
-                    logger.info(f"Skipping creation for template id {template_task['id']} and category {category} for {planned_date} because uncompleted Active Task already exists.")
+                    logger.info(f"Skipping creation for template id {template_task['id']} ('{task_name}') and category {category} for {planned_date} because uncompleted Active Task already exists.")
                     continue
                 properties = build_active_task_properties(template_task, template_schema, active_schema)
                 if TEMPLATE_ID_PROPERTY in active_schema:
@@ -406,7 +408,7 @@ def main():
                 properties["Category"] = {"select": {"name": category}}
                 properties["Planned Date"] = {"date": {"start": planned_date.isoformat()}}
                 notion.pages.create(parent={"database_id": ACTIVE_DB_ID}, properties=properties)
-                logger.info(f"Created Active Task for template id {template_task['id']} with Category {category} and Planned Date {planned_date}")
+                logger.info(f"Created Active Task '{task_name}' for template id {template_task['id']} with Category {category} and Planned Date {planned_date}")
         else:
             # For other frequencies, match category to day
             for category, planned_date in week_dates.items():
@@ -414,8 +416,9 @@ def main():
                     continue
                 if not is_task_due_for_week(template_task, week_start, planned_date):
                     continue
+                task_name = template_task["properties"].get("Task", "Unknown Task")
                 if uncompleted_task_exists_for_date(template_task["id"], category, planned_date, active_schema):
-                    logger.info(f"Skipping creation for template id {template_task['id']} and category {category} for {planned_date} because uncompleted Active Task already exists.")
+                    logger.info(f"Skipping creation for template id {template_task['id']} ('{task_name}') and category {category} for {planned_date} because uncompleted Active Task already exists.")
                     continue
                 properties = build_active_task_properties(template_task, template_schema, active_schema)
                 if TEMPLATE_ID_PROPERTY in active_schema:
@@ -423,7 +426,7 @@ def main():
                 properties["Category"] = {"select": {"name": category}}
                 properties["Planned Date"] = {"date": {"start": planned_date.isoformat()}}
                 notion.pages.create(parent={"database_id": ACTIVE_DB_ID}, properties=properties)
-                logger.info(f"Created Active Task for template id {template_task['id']} with Category {category} and Planned Date {planned_date}")
+                logger.info(f"Created Active Task '{task_name}' for template id {template_task['id']} with Category {category} and Planned Date {planned_date}")
     logger.info("Done.")
 
 if __name__ == "__main__":
