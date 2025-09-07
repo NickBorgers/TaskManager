@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Scheduler for Notion Home Task Manager
-Runs the task generation script weekly on Fridays
+Runs the task generation script weekly on Saturdays
 """
 
 import os
@@ -50,10 +50,10 @@ def run_daily_planned_date_review():
         # Don't raise the exception to keep the scheduler running
 
 def schedule_weekly_run():
-    """Schedule the weekly run for Friday at 9:00 AM"""
-    # Schedule for Friday at 9:00 AM
-    schedule.every().friday.at("09:00").do(run_weekly_tasks)
-    logger.info("Scheduled weekly task generation for Friday at 9:00 AM")
+    """Schedule the weekly run for Saturday at 9:00 AM"""
+    # Schedule for Saturday at 9:00 AM
+    schedule.every().saturday.at("09:00").do(run_weekly_tasks)
+    logger.info("Scheduled weekly task generation for Saturday at 9:00 AM")
 
 def schedule_daily_run():
     """Schedule the daily planned date review for 6:00 AM every day"""
@@ -77,7 +77,7 @@ def mark_first_run_complete():
         logger.warning(f"Could not create marker file: {e}")
 
 def run_immediately_if_needed():
-    """Run immediately if it's the first run or if it's Friday and past 9:00 AM"""
+    """Run immediately if it's the first run or if it's Saturday and past 9:00 AM"""
     now = datetime.now(pytz.UTC)
     
     # Check if this is the first run
@@ -87,18 +87,18 @@ def run_immediately_if_needed():
         mark_first_run_complete()
         return
     
-    # Check if it's Friday
-    if now.weekday() == 4:  # Friday is weekday 4
+    # Check if it's Saturday
+    if now.weekday() == 5:  # Saturday is weekday 5
         # Check if it's past 9:00 AM
         if now.hour >= 9:
             # Check if we should run (not already run today)
             # This is a simple check - in production you might want to use a more sophisticated approach
-            logger.info("It's Friday after 9:00 AM - running task generation immediately")
+            logger.info("It's Saturday after 9:00 AM - running task generation immediately")
             run_weekly_tasks()
         else:
-            logger.info(f"It's Friday but before 9:00 AM. Current time: {now.strftime('%Y-%m-%d %H:%M:%S %Z')}")
+            logger.info(f"It's Saturday but before 9:00 AM. Current time: {now.strftime('%Y-%m-%d %H:%M:%S %Z')}")
     else:
-        logger.info(f"Not Friday. Current day: {now.strftime('%A')}")
+        logger.info(f"Not Saturday. Current day: {now.strftime('%A')}")
 
 def run_daily_review_immediately_if_needed():
     """Run daily review immediately if it's past 6:00 AM and hasn't been run today"""

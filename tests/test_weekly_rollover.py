@@ -38,6 +38,11 @@ with patch.dict(os.environ, {'NOTION_INTEGRATION_SECRET': 'test-token'}, clear=T
                 uncompleted_task_exists_for_date,
                 is_task_due_for_week
             )
+            # Set up the global variables for testing
+            import create_active_tasks_from_templates
+            create_active_tasks_from_templates.TEMPLATE_DB_ID = 'template-db-id'
+            create_active_tasks_from_templates.ACTIVE_DB_ID = 'active-db-id'
+            create_active_tasks_from_templates.NOTION_TOKEN = 'test-token'
 
 class TestConfiguration:
     """Test configuration and environment validation"""
@@ -467,32 +472,32 @@ class TestTaskDueLogic:
         assert result == []
     
     @freeze_time("2024-01-15")  # Monday
-    def test_is_task_due_monday_thursday_monday(self):
-        """Test Monday/Thursday task due logic on Monday"""
+    def test_is_task_due_monday_friday_monday(self):
+        """Test Monday/Friday task due logic on Monday"""
         template_task = {
             "properties": {
-                "Frequency": "Monday/Thursday",
+                "Frequency": "Monday/Friday",
                 "Category": "Random/Monday"
             }
         }
         
         result = is_task_due(template_task)
         assert "Random/Monday" in result
-        assert "Cleaning/Thursday" in result
+        assert "Cleaning/Friday" in result
     
-    @freeze_time("2024-01-18")  # Thursday
-    def test_is_task_due_monday_thursday_thursday(self):
-        """Test Monday/Thursday task due logic on Thursday"""
+    @freeze_time("2024-01-19")  # Friday
+    def test_is_task_due_monday_friday_friday(self):
+        """Test Monday/Friday task due logic on Friday"""
         template_task = {
             "properties": {
-                "Frequency": "Monday/Thursday",
+                "Frequency": "Monday/Friday",
                 "Category": "Random/Monday"
             }
         }
         
         result = is_task_due(template_task)
         assert "Random/Monday" in result
-        assert "Cleaning/Thursday" in result
+        assert "Cleaning/Friday" in result
     
     @freeze_time("2024-01-15")  # Monday
     def test_is_task_due_unknown_frequency(self):
@@ -518,25 +523,25 @@ class TestWeekDateCalculations:
         # When today is Monday, next Monday is the same day (2024-01-15)
         expected_monday = date(2024, 1, 15)
         expected_tuesday = date(2024, 1, 16)
-        expected_thursday = date(2024, 1, 18)
+        expected_friday = date(2024, 1, 19)
         
         assert result["Random/Monday"] == expected_monday
         assert result["Cooking/Tuesday"] == expected_tuesday
-        assert result["Cleaning/Thursday"] == expected_thursday
+        assert result["Cleaning/Friday"] == expected_friday
     
-    @freeze_time("2024-01-18")  # Thursday
-    def test_get_next_week_dates_from_thursday(self):
-        """Test next week date calculations when today is Thursday"""
+    @freeze_time("2024-01-19")  # Friday
+    def test_get_next_week_dates_from_friday(self):
+        """Test next week date calculations when today is Friday"""
         result = get_next_week_dates()
         
-        # Should return next Monday (2024-01-22), Tuesday (2024-01-23), Thursday (2024-01-25)
+        # Should return next Monday (2024-01-22), Tuesday (2024-01-23), Friday (2024-01-26)
         expected_monday = date(2024, 1, 22)
         expected_tuesday = date(2024, 1, 23)
-        expected_thursday = date(2024, 1, 25)
+        expected_friday = date(2024, 1, 26)
         
         assert result["Random/Monday"] == expected_monday
         assert result["Cooking/Tuesday"] == expected_tuesday
-        assert result["Cleaning/Thursday"] == expected_thursday
+        assert result["Cleaning/Friday"] == expected_friday
 
 class TestTaskDueForWeek:
     """Test task due for week logic"""

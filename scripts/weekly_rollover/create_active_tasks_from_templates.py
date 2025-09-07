@@ -232,14 +232,14 @@ def is_task_due(template_task, now=None):
     elif freq == "Yearly":
         if not last_completed_dt or (now >= last_completed_dt + relativedelta(years=1)):
             due.append((props.get("Category"), True))
-    elif freq == "Monday/Thursday":
+    elif freq == "Monday/Friday":
         # Always check both days
         # Monday
         if not last_completed_dt or (now.weekday() == 0 and (not last_completed_dt or now.date() > last_completed_dt.date())):
             due.append(("Random/Monday", True))
-        # Thursday
-        if not last_completed_dt or (now.weekday() == 3 and (not last_completed_dt or now.date() > last_completed_dt.date())):
-            due.append(("Cleaning/Thursday", True))
+        # Friday (renamed from Thursday)
+        if not last_completed_dt or (now.weekday() == 4 and (not last_completed_dt or now.date() > last_completed_dt.date())):
+            due.append(("Cleaning/Friday", True))
     else:
         # Unknown frequency, always due
         due.append((props.get("Category"), True))
@@ -277,7 +277,7 @@ def get_next_week_dates(today=None):
     return {
         "Random/Monday": next_monday,
         "Cooking/Tuesday": next_monday + timedelta(days=1),
-        "Cleaning/Thursday": next_monday + timedelta(days=3),
+        "Cleaning/Friday": next_monday + timedelta(days=4),
     }
 
 def _parse_args():
@@ -389,7 +389,7 @@ def is_task_due_for_week(template_task, week_start, planned_date):
         if not last_completed_dt:
             return True
         return planned_dt >= last_completed_dt + relativedelta(years=1)
-    elif freq == "Monday/Thursday":
+    elif freq == "Monday/Friday":
         # Always due for both days if not completed on that day
         return not last_completed_dt or (planned_dt.date() > last_completed_dt.date())
     else:
@@ -422,10 +422,10 @@ def main():
     week_start = list(week_dates.values())[0]
     for template_task in template_tasks:
         freq = template_task["properties"].get("Frequency")
-        # For Monday/Thursday, always create both
-        if freq == "Monday/Thursday":
+        # For Monday/Friday, always create both
+        if freq == "Monday/Friday":
             for category, planned_date in week_dates.items():
-                if category not in ("Random/Monday", "Cleaning/Thursday"):
+                if category not in ("Random/Monday", "Cleaning/Friday"):
                     continue
                 if not is_task_due_for_week(template_task, week_start, planned_date):
                     continue
