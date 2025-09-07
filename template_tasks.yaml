@@ -39,6 +39,81 @@ schema:
   Task:
     type: title
 tasks:
+- id: 2620ac25-7c56-808e-98ee-f054b18c6c42
+  properties:
+    Category: Cleaning/Thursday
+    Priority: Normal
+    Instructions: Spray bottle is under sink, instructions are on the bottle.
+    Documentation: null
+    Frequency: Monthly
+    Last Completed:
+      start: '2025-09-05'
+      end: null
+      time_zone: null
+    Task: Seal Granite Countertops
+- id: 25b0ac25-7c56-80b3-9bed-cbe3f21c2599
+  properties:
+    Category: Cooking/Tuesday
+    Priority: Normal
+    Instructions: Wipe interior surfaces with damp rag. Do this after you clean old
+      items out but before you go shopping.
+    Documentation: null
+    Frequency: Quarterly
+    Last Completed:
+      start: '2025-09-02'
+      end: null
+      time_zone: null
+    Task: 'Before shopping: Clean inside of refrigerator'
+- id: 24c0ac25-7c56-8058-8da5-f40698165eb6
+  properties:
+    Category: Cooking/Tuesday
+    Priority: Normal
+    Instructions: Run machine with no laundry in it, put Affresh puck in like soap
+      and disable auto-detergent. Use “Self Clean” mode
+    Documentation: null
+    Frequency: Monthly
+    Last Completed:
+      start: '2025-08-19'
+      end: null
+      time_zone: null
+    Task: Run Affresh cycle on laundry machine
+- id: 24c0ac25-7c56-80f9-abd9-efa2d182c779
+  properties:
+    Category: Cleaning/Thursday
+    Priority: Normal
+    Instructions: 'Note: just pull the bottom arm straight up. Video covers the rest.'
+    Documentation: https://www.youtube.com/watch?v=GJFhqUn2Fs0
+    Frequency: Weekly
+    Last Completed:
+      start: '2025-08-28'
+      end: null
+      time_zone: null
+    Task: Clean dishwasher filter
+- id: 24c0ac25-7c56-8096-9dc1-debb1661297d
+  properties:
+    Category: Cleaning/Thursday
+    Priority: Normal
+    Instructions: Run machine with no dishes in it, put Affresh puck in like soap
+    Documentation: null
+    Frequency: Monthly
+    Last Completed:
+      start: '2025-08-21'
+      end: null
+      time_zone: null
+    Task: Run Affresh cycle on dishwasher
+- id: 24c0ac25-7c56-80a1-86a0-fddb08396934
+  properties:
+    Category: null
+    Priority: Normal
+    Instructions: Blue testing kit is above laundry machine
+    Documentation: null
+    Frequency: Monday/Thursday
+    Last Completed:
+      start: '2025-08-28'
+      end: null
+      time_zone: null
+    Task: 'Pool: test free chlorine and pH, record in PoolMath app. Add Chemicals
+      as suggested by app'
 - id: 24c0ac25-7c56-8027-a384-fb29f9e25f33
   properties:
     Category: Random/Monday
@@ -46,7 +121,10 @@ tasks:
     Instructions: null
     Documentation: null
     Frequency: Weekly
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-25'
+      end: null
+      time_zone: null
     Task: 'Whole House: Collect and breakdown empty cardboard boxes'
 - id: 24c0ac25-7c56-80a4-b966-efe45528b2eb
   properties:
@@ -70,7 +148,7 @@ tasks:
     Documentation: null
     Frequency: Monthly
     Last Completed:
-      start: '2025-07-29'
+      start: '2025-09-02'
       end: null
       time_zone: null
     Task: 'Hallway Litterbox: Refill with fresh litter'
@@ -109,7 +187,10 @@ tasks:
       Vacuum seats and floor mats.
     Documentation: null
     Frequency: Monthly
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-14'
+      end: null
+      time_zone: null
     Task: Clean car interior
 - id: 2450ac25-7c56-80e9-ac2c-ef38b39e1ddb
   properties:
@@ -118,7 +199,10 @@ tasks:
     Instructions: null
     Documentation: null
     Frequency: Quarterly
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-21'
+      end: null
+      time_zone: null
     Task: 'Guest bedroom: Shampoo Carpet'
 - id: 2450ac25-7c56-800c-82ed-e2f85de97c7c
   properties:
@@ -127,8 +211,11 @@ tasks:
     Instructions: null
     Documentation: null
     Frequency: Quarterly
-    Last Completed: null
-    Task: 'Nick office: Shampoo Carpet'
+    Last Completed:
+      start: '2025-08-14'
+      end: null
+      time_zone: null
+    Task: 'Nick office: Early morning: Shampoo Carpet'
 - id: 2450ac25-7c56-80c0-82a4-e82127e4bfc2
   properties:
     Category: Cleaning/Thursday
@@ -136,7 +223,10 @@ tasks:
     Instructions: null
     Documentation: null
     Frequency: Quarterly
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-14'
+      end: null
+      time_zone: null
     Task: 'Primary Bedroom: Shampoo Carpets'
 - id: 2450ac25-7c56-80c4-913c-e24372065127
   properties:
@@ -146,7 +236,7 @@ tasks:
     Documentation: https://www.notion.so/Breakfast-2450ac257c5680be9552f079c4f26dce?source=copy_link
     Frequency: Daily
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-09-02'
       end: null
       time_zone: null
     Task: Make breakfast
@@ -158,7 +248,7 @@ tasks:
     Documentation: null
     Frequency: Weekly
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-08-28'
       end: null
       time_zone: null
     Task: Ensure all laundry is folded and put away
@@ -170,7 +260,7 @@ tasks:
     Documentation: https://docs.google.com/document/d/1B8d6cNKT9ICGc-CIKYk42UST8vFFAZhVDfa64r4dPGM/edit?tab=t.0
     Frequency: Daily
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-09-02'
       end: null
       time_zone: null
     Task: Run at least one load of laundry
@@ -181,8 +271,11 @@ tasks:
     Instructions: null
     Documentation: null
     Frequency: Quarterly
-    Last Completed: null
-    Task: 'Caroline office: Shampoo Carpets'
+    Last Completed:
+      start: '2025-08-21'
+      end: null
+      time_zone: null
+    Task: 'Caroline office: Early morning: Shampoo Carpets'
 - id: 2450ac25-7c56-80a0-89b0-ce908caf76a1
   properties:
     Category: Cleaning/Thursday
@@ -190,7 +283,10 @@ tasks:
     Instructions: null
     Documentation: null
     Frequency: Quarterly
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-14'
+      end: null
+      time_zone: null
     Task: Wipe all baseboards
 - id: 2450ac25-7c56-80d5-9f8c-d3be0d840004
   properties:
@@ -199,7 +295,10 @@ tasks:
     Instructions: null
     Documentation: null
     Frequency: Quarterly
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-14'
+      end: null
+      time_zone: null
     Task: Clean inside of windows
 - id: 2450ac25-7c56-8002-846b-c8a773b43ff2
   properties:
@@ -208,7 +307,10 @@ tasks:
     Instructions: null
     Documentation: null
     Frequency: Quarterly
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-14'
+      end: null
+      time_zone: null
     Task: Dust / wipe down fan blades
 - id: 2450ac25-7c56-8037-8421-da10c14ea75c
   properties:
@@ -217,7 +319,10 @@ tasks:
     Instructions: null
     Documentation: null
     Frequency: Quarterly
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-14'
+      end: null
+      time_zone: null
     Task: Wipe down / clean the trashcans
 - id: 2450ac25-7c56-80aa-b88e-f9c315f5fbc9
   properties:
@@ -226,7 +331,10 @@ tasks:
     Instructions: null
     Documentation: null
     Frequency: Monthly
-    Last Completed: null
+    Last Completed:
+      start: '2025-08-14'
+      end: null
+      time_zone: null
     Task: 'Windows: Dust the window shutters'
 - id: 2450ac25-7c56-80f1-88b6-e50bef0528dd
   properties:
@@ -236,7 +344,7 @@ tasks:
     Documentation: null
     Frequency: Weekly
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-08-28'
       end: null
       time_zone: null
     Task: 'Kitchen: Clean cat fountains - disassemble and brush fountain pump and
@@ -249,7 +357,7 @@ tasks:
     Documentation: null
     Frequency: Weekly
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-08-28'
       end: null
       time_zone: null
     Task: 'Nick office: Early morning: Vacuum'
@@ -261,7 +369,7 @@ tasks:
     Documentation: null
     Frequency: Weekly
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-08-28'
       end: null
       time_zone: null
     Task: 'Caroline office: Early morning: Vacuum'
@@ -273,7 +381,7 @@ tasks:
     Documentation: null
     Frequency: Weekly
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-08-28'
       end: null
       time_zone: null
     Task: 'Front room (former office): Dust/wipe down surfaces'
@@ -285,7 +393,7 @@ tasks:
     Documentation: null
     Frequency: Weekly
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-08-28'
       end: null
       time_zone: null
     Task: 'Nick office: Early morning: Dust/wipe down surfaces'
@@ -297,7 +405,7 @@ tasks:
     Documentation: null
     Frequency: Weekly
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-08-28'
       end: null
       time_zone: null
     Task: 'Caroline office: Early morning: Dust/wipe down surfaces'
@@ -309,7 +417,7 @@ tasks:
     Documentation: null
     Frequency: Weekly
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-08-28'
       end: null
       time_zone: null
     Task: 'Primary bedroom: Dust/wipe down surfaces'
@@ -321,7 +429,7 @@ tasks:
     Documentation: null
     Frequency: Weekly
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-08-28'
       end: null
       time_zone: null
     Task: 'Primary bedroom: Change and wash sheets'
@@ -333,7 +441,7 @@ tasks:
     Documentation: null
     Frequency: Weekly
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-08-28'
       end: null
       time_zone: null
     Task: 'Half guest bathroom: Replace and wash hand towels'
@@ -345,7 +453,7 @@ tasks:
     Documentation: null
     Frequency: Monthly
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-08-14'
       end: null
       time_zone: null
     Task: 'Half guest bathroom: Mop floor (steam mop if helpful)'
@@ -357,7 +465,7 @@ tasks:
     Documentation: null
     Frequency: Monthly
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-08-14'
       end: null
       time_zone: null
     Task: 'Full guest bathroom: Mop floor (steam mop if helpful)'
@@ -369,7 +477,7 @@ tasks:
     Documentation: null
     Frequency: Monthly
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-08-14'
       end: null
       time_zone: null
     Task: 'Full guest bathroom: Clean shower, tub, and glass'
@@ -381,7 +489,7 @@ tasks:
     Documentation: null
     Frequency: Weekly
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-08-28'
       end: null
       time_zone: null
     Task: 'Half guest bathroom: Clean sinks, mirror, toilets, door handles'
@@ -393,7 +501,7 @@ tasks:
     Documentation: null
     Frequency: Weekly
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-08-28'
       end: null
       time_zone: null
     Task: 'Full guest bathroom: Replace and wash all hand towels, wash cloths etc.'
@@ -405,7 +513,7 @@ tasks:
     Documentation: null
     Frequency: Weekly
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-08-28'
       end: null
       time_zone: null
     Task: 'Full guest bathroom: Clean sinks, mirror, toilets, door handles'
@@ -417,7 +525,7 @@ tasks:
     Documentation: null
     Frequency: Monthly
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-08-14'
       end: null
       time_zone: null
     Task: 'Primary bathroom: Clean shower'
@@ -429,7 +537,7 @@ tasks:
     Documentation: null
     Frequency: Monthly
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-08-14'
       end: null
       time_zone: null
     Task: 'Primary bathroom: Mop floor (steam mop if helpful)'
@@ -441,7 +549,7 @@ tasks:
     Documentation: null
     Frequency: Weekly
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-08-28'
       end: null
       time_zone: null
     Task: 'Primary bathroom: Clean sinks, mirror, toilets, door handles'
@@ -453,7 +561,7 @@ tasks:
     Documentation: null
     Frequency: Weekly
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-08-28'
       end: null
       time_zone: null
     Task: 'Living Spaces: Check for spots/stains and wipe or spot clean with Folex'
@@ -465,7 +573,7 @@ tasks:
     Documentation: null
     Frequency: Weekly
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-08-28'
       end: null
       time_zone: null
     Task: 'Primary bathroom: Replace and wash all hand towels, wash cloths etc.'
@@ -477,7 +585,7 @@ tasks:
     Documentation: null
     Frequency: Weekly
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-08-28'
       end: null
       time_zone: null
     Task: 'Living Spaces: Dust/wipe down surfaces'
@@ -489,7 +597,7 @@ tasks:
     Documentation: null
     Frequency: Daily
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-09-02'
       end: null
       time_zone: null
     Task: 'Living Spaces: Tidy up'
@@ -501,7 +609,7 @@ tasks:
     Documentation: null
     Frequency: Daily
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-09-02'
       end: null
       time_zone: null
     Task: 'Living Spaces: Fold couch blankets'
@@ -513,7 +621,7 @@ tasks:
     Documentation: null
     Frequency: Quarterly
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-08-14'
       end: null
       time_zone: null
     Task: 'Kitchen: Clean backsplash and cabinets'
@@ -525,7 +633,7 @@ tasks:
     Documentation: null
     Frequency: Quarterly
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-08-14'
       end: null
       time_zone: null
     Task: 'Kitchen: Clean any spills in oven'
@@ -537,7 +645,7 @@ tasks:
     Documentation: null
     Frequency: Weekly
     Last Completed:
-      start: '2025-08-05'
+      start: '2025-09-02'
       end: null
       time_zone: null
     Task: 'Kitchen: Clean out / organize fridge'
@@ -549,7 +657,7 @@ tasks:
     Documentation: null
     Frequency: Weekly
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-08-28'
       end: null
       time_zone: null
     Task: 'Whole house: Vacuum all floors'
@@ -561,7 +669,7 @@ tasks:
     Documentation: null
     Frequency: Weekly
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-08-28'
       end: null
       time_zone: null
     Task: 'Common areas: Mop all floors'
@@ -573,7 +681,7 @@ tasks:
     Documentation: null
     Frequency: Monthly
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-08-14'
       end: null
       time_zone: null
     Task: 'Kitchen: Wipe down front of appliances with stainless steel cleaner'
@@ -585,7 +693,7 @@ tasks:
     Documentation: null
     Frequency: Weekly
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-08-28'
       end: null
       time_zone: null
     Task: 'Kitchen: Wipe down all cabinet, stove, fridge, and drawer handles'
@@ -597,7 +705,7 @@ tasks:
     Documentation: null
     Frequency: Weekly
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-08-28'
       end: null
       time_zone: null
     Task: 'Kitchen: Run cleaning cycle on Nespresso'
@@ -609,7 +717,7 @@ tasks:
     Documentation: null
     Frequency: Monthly
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-08-14'
       end: null
       time_zone: null
     Task: 'Kitchen: Clean toaster oven interior'
@@ -621,7 +729,7 @@ tasks:
     Documentation: null
     Frequency: Weekly
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-08-28'
       end: null
       time_zone: null
     Task: 'Kitchen: Clean microwave interior'
@@ -633,7 +741,7 @@ tasks:
     Documentation: null
     Frequency: Monday/Thursday
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-08-28'
       end: null
       time_zone: null
     Task: 'Vacuum robot: empty dirty water and refill clean water'
@@ -645,7 +753,7 @@ tasks:
     Documentation: null
     Frequency: Daily
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-09-02'
       end: null
       time_zone: null
     Task: 'Kitchen: If any, hand wash any items as needed (e.g. air fryer trays)'
@@ -657,7 +765,7 @@ tasks:
     Documentation: null
     Frequency: Daily
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-09-02'
       end: null
       time_zone: null
     Task: 'Whole house: Collect dishes/cups and bring to dishwasher'
@@ -669,7 +777,7 @@ tasks:
     Documentation: null
     Frequency: Weekly
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-09-02'
       end: null
       time_zone: null
     Task: 'Whole house: Empty all small trash bins'
@@ -681,7 +789,7 @@ tasks:
     Documentation: null
     Frequency: Weekly
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-09-02'
       end: null
       time_zone: null
     Task: Take trash out
@@ -693,7 +801,7 @@ tasks:
     Documentation: null
     Frequency: Monday/Thursday
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-08-28'
       end: null
       time_zone: null
     Task: Fold Couch blankets and tidy
@@ -705,7 +813,7 @@ tasks:
     Documentation: null
     Frequency: Daily
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-09-02'
       end: null
       time_zone: null
     Task: 'Kitchen: Empty sink strainer, scrub and rinse sink with dish soap'
@@ -717,7 +825,7 @@ tasks:
     Documentation: null
     Frequency: Daily
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-09-02'
       end: null
       time_zone: null
     Task: 'Kitchen: Load and start dishwasher if needed'
@@ -729,7 +837,7 @@ tasks:
     Documentation: null
     Frequency: Monday/Thursday
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-09-02'
       end: null
       time_zone: null
     Task: Scoop litter
@@ -741,7 +849,7 @@ tasks:
     Documentation: null
     Frequency: Daily
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-09-02'
       end: null
       time_zone: null
     Task: 'Kitchen: Wipe down counters and table'
@@ -753,7 +861,7 @@ tasks:
     Documentation: https://docs.google.com/document/d/1B8d6cNKT9ICGc-CIKYk42UST8vFFAZhVDfa64r4dPGM/edit?tab=t.inn7zf4o2gbs
     Frequency: Weekly
     Last Completed:
-      start: '2025-08-06'
+      start: '2025-09-02'
       end: null
       time_zone: null
     Task: Review Inventory List and identify missing items
@@ -765,7 +873,7 @@ tasks:
     Documentation: null
     Frequency: Weekly
     Last Completed:
-      start: '2025-08-10'
+      start: '2025-09-02'
       end: null
       time_zone: null
     Task: Check Cat Fountains, refill with filtered water
