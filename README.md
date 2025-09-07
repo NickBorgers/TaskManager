@@ -4,7 +4,7 @@
 [![Docker](https://img.shields.io/badge/docker-available-blue?style=flat-square&logo=docker)](https://hub.docker.com/)
 [![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)](LICENSE)
 
-A comprehensive task management system for household employees, built with Notion databases and Python automation. This system manages recurring tasks with themed workdays (Random/Errands on Monday, Cooking on Tuesday, Cleaning on Thursday) and automatically generates actionable tasks for the coming week.
+A comprehensive task management system for household employees, built with Notion databases and Python automation. This system manages recurring tasks with themed workdays (Random/Errands on Monday, Cooking on Tuesday, Cleaning on Friday) and automatically generates actionable tasks for the coming week.
 
 ## Overview
 
@@ -14,13 +14,13 @@ The system consists of two Notion databases:
 
 ## Features
 
-- **Recurring Task Management**: Define tasks with various frequencies (Daily, Weekly, Monthly, Quarterly, Yearly, Monday/Thursday)
-- **Themed Workdays**: Automatic categorization based on work schedule (Monday: Random/Errands, Tuesday: Cooking, Thursday: Cleaning)
+- **Recurring Task Management**: Define tasks with various frequencies (Daily, Weekly, Monthly, Quarterly, Yearly, Monday/Friday)
+- **Themed Workdays**: Automatic categorization based on work schedule (Monday: Random/Errands, Tuesday: Cooking, Friday: Cleaning)
 - **Week-Ahead Planning**: Generate all tasks for the coming week in advance
 - **Completion Tracking**: Automatically update template completion dates based on active task status
 - **Duplicate Prevention**: Avoid creating duplicate active tasks
 - **Live Notion Integration**: Direct API integration for real-time updates
-- **Automated Scheduling**: Built-in scheduler runs weekly on Fridays at 9:00 AM and daily at 6:00 AM
+- **Automated Scheduling**: Built-in scheduler runs weekly on Saturdays at 9:00 AM and daily at 6:00 AM
 - **Daily Planned Date Review**: Automatically sets planned dates for active tasks that lack them, assigns categories to uncategorized tasks, and reschedules old incomplete tasks (sets to Thursday of next week)
 - **Continuous Operation**: Container runs continuously and handles its own scheduling
 - **First-Run Execution**: Automatically runs task generation on first container startup regardless of day
@@ -126,15 +126,15 @@ export NOTION_INTEGRATION_TOKEN="your_integration_token_here"
 
 #### Template Tasks Database
 - **Name** (title): Task name
-- **Category** (select): Random/Monday, Cooking/Tuesday, Cleaning/Thursday
-- **Frequency** (select): Daily, Weekly, Monthly, Quarterly, Yearly, Monday/Thursday
+- **Category** (select): Random/Monday, Cooking/Tuesday, Cleaning/Friday
+- **Frequency** (select): Daily, Weekly, Monthly, Quarterly, Yearly, Monday/Friday
 - **Last Completed** (date): Last completion date (auto-updated)
 - **Description** (rich_text): Task description
 - **Status** (status): Active, Inactive
 
 #### Active Tasks Database
 - **Name** (title): Task name (copied from template)
-- **Category** (select): Random/Monday, Cooking/Tuesday, Cleaning/Thursday
+- **Category** (select): Random/Monday, Cooking/Tuesday, Cleaning/Friday
 - **Status** (status): Not Started, In Progress, Complete
 - **Planned Date** (date): Expected completion date
 - **TemplateId** (rich_text): Reference to source template task
@@ -144,7 +144,7 @@ export NOTION_INTEGRATION_TOKEN="your_integration_token_here"
 
 ### Weekly Task Generation
 
-The system automatically generates tasks for the coming week every Friday at 9:00 AM. On first startup, it will run immediately regardless of the day to ensure tasks are generated for the current week.
+The system automatically generates tasks for the coming week every Saturday at 9:00 AM. On first startup, it will run immediately regardless of the day to ensure tasks are generated for the current week.
 
 ### Daily Planned Date Review
 
@@ -235,13 +235,13 @@ This script:
 - **Monthly**: Creates one task per month if not completed in the previous month
 - **Quarterly**: Creates one task per quarter if not completed in the previous quarter
 - **Yearly**: Creates one task per year if not completed in the previous year
-- **Monday/Thursday**: Creates two tasks per week (Monday and Thursday) with appropriate categories
+- **Monday/Friday**: Creates two tasks per week (Monday and Friday) with appropriate categories
 
-### Monday/Thursday Special Handling
+### Monday/Friday Special Handling
 
-Tasks with "Monday/Thursday" frequency are automatically split into two active tasks:
+Tasks with "Monday/Friday" frequency are automatically split into two active tasks:
 - One with "Random/Monday" category for Monday
-- One with "Cleaning/Thursday" category for Thursday
+- One with "Cleaning/Friday" category for Friday
 
 This allows the same task template to be scheduled for both themed days.
 
@@ -253,7 +253,7 @@ These scripts are part of the continuous runtime system:
 
 - `scripts/weekly_rollover/create_active_tasks_from_templates.py`: Main script for generating weekly tasks
 - `scripts/daily_planned_date_review.py`: Daily script for setting planned dates on active tasks
-- `scripts/scheduler.py`: Scheduler that runs task generation weekly on Fridays at 9:00 AM and daily review at 6:00 AM
+- `scripts/scheduler.py`: Scheduler that runs task generation weekly on Saturdays at 9:00 AM and daily review at 6:00 AM
 
 ### Utility Scripts
 
@@ -376,7 +376,7 @@ The system includes robust error handling for:
 2. **Monitor Logs**: Check logs for any issues with task generation or API calls
 3. **Backup Templates**: Keep template tasks organized and up-to-date
 4. **Review Categories**: Ensure template tasks have appropriate categories for themed days
-5. **Schedule Timing**: The scheduler runs every Friday at 9:00 AM UTC - adjust your timezone accordingly
+5. **Schedule Timing**: The scheduler runs every Saturday at 9:00 AM UTC - adjust your timezone accordingly
 
 ## Troubleshooting
 

@@ -26,14 +26,14 @@ Active tasks are first assessed to understand completion status and update templ
 ### 2. Generation Phase
 Active tasks are then created as needed from template tasks:
 
-1. **Get Next Week Dates**: Calculate planned dates for the coming week (Monday, Tuesday, Thursday)
+1. **Get Next Week Dates**: Calculate planned dates for the coming week (Monday, Tuesday, Friday)
 2. **Process Each Template**: For each template task:
    - Determine frequency and category matching logic
    - Check if task is due for the week using `is_task_due_for_week()`
    - Check for existing uncompleted tasks using `uncompleted_task_exists_for_date()`
    - Create new active tasks with appropriate properties and planned dates
 3. **Category-Specific Logic**:
-   - **Monday/Thursday**: Creates both Monday and Thursday tasks regardless of template category
+   - **Monday/Friday**: Creates both Monday and Friday tasks regardless of template category
    - **Daily**: Creates tasks for all three workdays regardless of template category
    - **Other frequencies**: Only creates tasks when template category matches workday category
 
@@ -78,7 +78,7 @@ graph TB
 ### 1. Scheduler (`scripts/scheduler.py`)
 **Role**: Orchestrates the automated execution of task generation
 - Runs continuously in a container
-- Schedules weekly task generation for Fridays at 9:00 AM UTC
+- Schedules weekly task generation for Saturdays at 9:00 AM UTC
 - Handles first-run execution (runs immediately on container startup)
 - Manages logging and error handling for the scheduling process
 
@@ -139,7 +139,7 @@ sequenceDiagram
     participant ActiveDB
     participant TemplateDB
     
-    Note over Scheduler: Weekly Schedule (Friday 9:00 AM)
+    Note over Scheduler: Weekly Schedule (Saturday 9:00 AM)
     Scheduler->>TaskGenerator: Execute task generation
     
     Note over TaskGenerator: Phase 1: Assessment
@@ -173,22 +173,22 @@ sequenceDiagram
 The system implements sophisticated frequency logic for task generation:
 
 ### Standard Frequencies
-- **Daily**: Creates tasks for all three workdays (Monday, Tuesday, Thursday) if not completed on the planned date
+- **Daily**: Creates tasks for all three workdays (Monday, Tuesday, Friday) if not completed on the planned date
 - **Weekly**: Creates one task per week if not completed in the week before the planned date
 - **Monthly**: Creates one task per month if not completed in the previous month
 - **Quarterly**: Creates one task per quarter if not completed in the previous quarter
 - **Yearly**: Creates one task per year if not completed in the previous year
 
-### Special Handling: Monday/Thursday
-Tasks with "Monday/Thursday" frequency are automatically split into two active tasks:
+### Special Handling: Monday/Friday
+Tasks with "Monday/Friday" frequency are automatically split into two active tasks:
 - One with "Random/Monday" category for Monday
-- One with "Cleaning/Thursday" category for Thursday
+- One with "Cleaning/Friday" category for Friday
 
 This allows the same task template to be scheduled for both themed workdays. The system creates both tasks regardless of the template's original category.
 
 ### Category Matching Logic
-- **Monday/Thursday frequency**: Always creates both Monday and Thursday tasks with appropriate categories
-- **Daily frequency**: Creates tasks for all three workdays (Monday, Tuesday, Thursday) regardless of template category
+- **Monday/Friday frequency**: Always creates both Monday and Friday tasks with appropriate categories
+- **Daily frequency**: Creates tasks for all three workdays (Monday, Tuesday, Friday) regardless of template category
 - **Other frequencies**: Only creates tasks when the template's category matches the workday category
 
 ## Error Handling and Resilience

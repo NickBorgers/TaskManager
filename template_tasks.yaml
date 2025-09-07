@@ -6,7 +6,7 @@ schema:
       color: purple
     - name: Cooking/Tuesday
       color: green
-    - name: Cleaning/Thursday
+    - name: Cleaning/Friday
       color: blue
   Priority:
     type: select
@@ -32,7 +32,7 @@ schema:
       color: orange
     - name: Yearly
       color: red
-    - name: Monday/Thursday
+    - name: Monday/Friday
       color: brown
   Last Completed:
     type: date
@@ -41,7 +41,7 @@ schema:
 tasks:
 - id: 2620ac25-7c56-808e-98ee-f054b18c6c42
   properties:
-    Category: Cleaning/Thursday
+    Category: Cleaning/Friday
     Priority: Normal
     Instructions: Spray bottle is under sink, instructions are on the bottle.
     Documentation: null
@@ -79,7 +79,7 @@ tasks:
     Task: Run Affresh cycle on laundry machine
 - id: 24c0ac25-7c56-80f9-abd9-efa2d182c779
   properties:
-    Category: Cleaning/Thursday
+    Category: Cleaning/Friday
     Priority: Normal
     Instructions: 'Note: just pull the bottom arm straight up. Video covers the rest.'
     Documentation: https://www.youtube.com/watch?v=GJFhqUn2Fs0
@@ -91,7 +91,7 @@ tasks:
     Task: Clean dishwasher filter
 - id: 24c0ac25-7c56-8096-9dc1-debb1661297d
   properties:
-    Category: Cleaning/Thursday
+    Category: Cleaning/Friday
     Priority: Normal
     Instructions: Run machine with no dishes in it, put Affresh puck in like soap
     Documentation: null
@@ -107,7 +107,7 @@ tasks:
     Priority: Normal
     Instructions: Blue testing kit is above laundry machine
     Documentation: null
-    Frequency: Monday/Thursday
+    Frequency: Monday/Friday
     Last Completed:
       start: '2025-08-28'
       end: null
@@ -180,7 +180,7 @@ tasks:
     Task: 'Laundry Room Litterbox: Remove litter and wash liner'
 - id: 2460ac25-7c56-8081-81e3-c56ceb38a298
   properties:
-    Category: Cleaning/Thursday
+    Category: Cleaning/Friday
     Priority: Normal
     Instructions: Wipe down all surfaces with a slightly damp cloth/rag. Use glass
       cleaner and lint free cloth to clean windshield and other window interiors.
@@ -194,7 +194,7 @@ tasks:
     Task: Clean car interior
 - id: 2450ac25-7c56-80e9-ac2c-ef38b39e1ddb
   properties:
-    Category: Cleaning/Thursday
+    Category: Cleaning/Friday
     Priority: Normal
     Instructions: null
     Documentation: null
@@ -206,7 +206,7 @@ tasks:
     Task: 'Guest bedroom: Shampoo Carpet'
 - id: 2450ac25-7c56-800c-82ed-e2f85de97c7c
   properties:
-    Category: Cleaning/Thursday
+    Category: Cleaning/Friday
     Priority: Normal
     Instructions: null
     Documentation: null
@@ -218,7 +218,7 @@ tasks:
     Task: 'Nick office: Early morning: Shampoo Carpet'
 - id: 2450ac25-7c56-80c0-82a4-e82127e4bfc2
   properties:
-    Category: Cleaning/Thursday
+    Category: Cleaning/Friday
     Priority: Normal
     Instructions: null
     Documentation: null
@@ -242,7 +242,7 @@ tasks:
     Task: Make breakfast
 - id: 2450ac25-7c56-80f8-a43f-e0dded65accf
   properties:
-    Category: Cleaning/Thursday
+    Category: Cleaning/Friday
     Priority: Normal
     Instructions: null
     Documentation: null
@@ -266,7 +266,7 @@ tasks:
     Task: Run at least one load of laundry
 - id: 2450ac25-7c56-8032-a8fb-f9e4ebf1f320
   properties:
-    Category: Cleaning/Thursday
+    Category: Cleaning/Friday
     Priority: Normal
     Instructions: null
     Documentation: null
@@ -278,7 +278,7 @@ tasks:
     Task: 'Caroline office: Early morning: Shampoo Carpets'
 - id: 2450ac25-7c56-80a0-89b0-ce908caf76a1
   properties:
-    Category: Cleaning/Thursday
+    Category: Cleaning/Friday
     Priority: Normal
     Instructions: null
     Documentation: null
@@ -290,7 +290,7 @@ tasks:
     Task: Wipe all baseboards
 - id: 2450ac25-7c56-80d5-9f8c-d3be0d840004
   properties:
-    Category: Cleaning/Thursday
+    Category: Cleaning/Friday
     Priority: Normal
     Instructions: null
     Documentation: null
@@ -302,7 +302,7 @@ tasks:
     Task: Clean inside of windows
 - id: 2450ac25-7c56-8002-846b-c8a773b43ff2
   properties:
-    Category: Cleaning/Thursday
+    Category: Cleaning/Friday
     Priority: Normal
     Instructions: null
     Documentation: null
@@ -314,7 +314,7 @@ tasks:
     Task: Dust / wipe down fan blades
 - id: 2450ac25-7c56-8037-8421-da10c14ea75c
   properties:
-    Category: Cleaning/Thursday
+    Category: Cleaning/Friday
     Priority: Normal
     Instructions: null
     Documentation: null
@@ -326,7 +326,7 @@ tasks:
     Task: Wipe down / clean the trashcans
 - id: 2450ac25-7c56-80aa-b88e-f9c315f5fbc9
   properties:
-    Category: Cleaning/Thursday
+    Category: Cleaning/Friday
     Priority: Normal
     Instructions: null
     Documentation: null
@@ -338,7 +338,7 @@ tasks:
     Task: 'Windows: Dust the window shutters'
 - id: 2450ac25-7c56-80f1-88b6-e50bef0528dd
   properties:
-    Category: Cleaning/Thursday
+    Category: Cleaning/Friday
     Priority: Normal
     Instructions: null
     Documentation: null
@@ -351,7 +351,7 @@ tasks:
       basin'
 - id: 2450ac25-7c56-8034-b562-c38a9c3c5ba7
   properties:
-    Category: Cleaning/Thursday
+    Category: Cleaning/Friday
     Priority: Normal
     Instructions: null
     Documentation: null
@@ -363,7 +363,7 @@ tasks:
     Task: 'Nick office: Early morning: Vacuum'
 - id: 2450ac25-7c56-807d-ae51-fb383c0a2ca8
   properties:
-    Category: Cleaning/Thursday
+    Category: Cleaning/Friday
     Priority: Normal
     Instructions: null
     Documentation: null
@@ -375,7 +375,7 @@ tasks:
     Task: 'Caroline office: Early morning: Vacuum'
 - id: 2450ac25-7c56-8030-bc9a-dcb213581845
   properties:
-    Category: Cleaning/Thursday
+    Category: Cleaning/Friday
     Priority: Normal
     Instructions: null
     Documentation: null
@@ -387,7 +387,7 @@ tasks:
     Task: 'Front room (former office): Dust/wipe down surfaces'
 - id: 2450ac25-7c56-8034-8714-fa9e8cfd471f
   properties:
-    Category: Cleaning/Thursday
+    Category: Cleaning/Friday
     Priority: Normal
     Instructions: null
     Documentation: null
@@ -399,7 +399,7 @@ tasks:
     Task: 'Nick office: Early morning: Dust/wipe down surfaces'
 - id: 2450ac25-7c56-80c1-b5fb-c2f6cd730dcb
   properties:
-    Category: Cleaning/Thursday
+    Category: Cleaning/Friday
     Priority: Normal
     Instructions: null
     Documentation: null
@@ -411,7 +411,7 @@ tasks:
     Task: 'Caroline office: Early morning: Dust/wipe down surfaces'
 - id: 2450ac25-7c56-8083-af09-ebbd586d79c9
   properties:
-    Category: Cleaning/Thursday
+    Category: Cleaning/Friday
     Priority: Normal
     Instructions: null
     Documentation: null
@@ -423,7 +423,7 @@ tasks:
     Task: 'Primary bedroom: Dust/wipe down surfaces'
 - id: 2450ac25-7c56-80a1-809d-c0b5c139fcbe
   properties:
-    Category: Cleaning/Thursday
+    Category: Cleaning/Friday
     Priority: Normal
     Instructions: null
     Documentation: null
@@ -435,7 +435,7 @@ tasks:
     Task: 'Primary bedroom: Change and wash sheets'
 - id: 2450ac25-7c56-8065-8d65-dc2eb912fc08
   properties:
-    Category: Cleaning/Thursday
+    Category: Cleaning/Friday
     Priority: Normal
     Instructions: null
     Documentation: null
@@ -447,7 +447,7 @@ tasks:
     Task: 'Half guest bathroom: Replace and wash hand towels'
 - id: 2450ac25-7c56-801e-98b6-f78390a0c3b5
   properties:
-    Category: Cleaning/Thursday
+    Category: Cleaning/Friday
     Priority: Normal
     Instructions: null
     Documentation: null
@@ -459,7 +459,7 @@ tasks:
     Task: 'Half guest bathroom: Mop floor (steam mop if helpful)'
 - id: 2450ac25-7c56-80e2-a1bc-e4d6d46ff847
   properties:
-    Category: Cleaning/Thursday
+    Category: Cleaning/Friday
     Priority: Normal
     Instructions: null
     Documentation: null
@@ -471,7 +471,7 @@ tasks:
     Task: 'Full guest bathroom: Mop floor (steam mop if helpful)'
 - id: 2450ac25-7c56-80fc-b7b7-c5133b4fe91b
   properties:
-    Category: Cleaning/Thursday
+    Category: Cleaning/Friday
     Priority: Normal
     Instructions: null
     Documentation: null
@@ -483,7 +483,7 @@ tasks:
     Task: 'Full guest bathroom: Clean shower, tub, and glass'
 - id: 2450ac25-7c56-806c-8706-e7446bb66464
   properties:
-    Category: Cleaning/Thursday
+    Category: Cleaning/Friday
     Priority: Normal
     Instructions: null
     Documentation: null
@@ -495,7 +495,7 @@ tasks:
     Task: 'Half guest bathroom: Clean sinks, mirror, toilets, door handles'
 - id: 2450ac25-7c56-80d3-a838-cacdee89fdef
   properties:
-    Category: Cleaning/Thursday
+    Category: Cleaning/Friday
     Priority: Normal
     Instructions: null
     Documentation: null
@@ -507,7 +507,7 @@ tasks:
     Task: 'Full guest bathroom: Replace and wash all hand towels, wash cloths etc.'
 - id: 2450ac25-7c56-802e-892d-ede41df762cd
   properties:
-    Category: Cleaning/Thursday
+    Category: Cleaning/Friday
     Priority: Normal
     Instructions: null
     Documentation: null
@@ -519,7 +519,7 @@ tasks:
     Task: 'Full guest bathroom: Clean sinks, mirror, toilets, door handles'
 - id: 2450ac25-7c56-801f-ac03-e1ab174378fe
   properties:
-    Category: Cleaning/Thursday
+    Category: Cleaning/Friday
     Priority: Normal
     Instructions: null
     Documentation: null
@@ -531,7 +531,7 @@ tasks:
     Task: 'Primary bathroom: Clean shower'
 - id: 2450ac25-7c56-8094-9e4a-e02e3034ab5b
   properties:
-    Category: Cleaning/Thursday
+    Category: Cleaning/Friday
     Priority: Normal
     Instructions: null
     Documentation: null
@@ -543,7 +543,7 @@ tasks:
     Task: 'Primary bathroom: Mop floor (steam mop if helpful)'
 - id: 2450ac25-7c56-80b0-bc6e-d0c6d1ad7f52
   properties:
-    Category: Cleaning/Thursday
+    Category: Cleaning/Friday
     Priority: Normal
     Instructions: null
     Documentation: null
@@ -555,7 +555,7 @@ tasks:
     Task: 'Primary bathroom: Clean sinks, mirror, toilets, door handles'
 - id: 2450ac25-7c56-80d2-a40e-d3e34026c551
   properties:
-    Category: Cleaning/Thursday
+    Category: Cleaning/Friday
     Priority: Normal
     Instructions: null
     Documentation: null
@@ -567,7 +567,7 @@ tasks:
     Task: 'Living Spaces: Check for spots/stains and wipe or spot clean with Folex'
 - id: 2450ac25-7c56-80a8-81bb-df975081623b
   properties:
-    Category: Cleaning/Thursday
+    Category: Cleaning/Friday
     Priority: Normal
     Instructions: null
     Documentation: null
@@ -579,7 +579,7 @@ tasks:
     Task: 'Primary bathroom: Replace and wash all hand towels, wash cloths etc.'
 - id: 2450ac25-7c56-8097-9fce-e1f4c26bfaef
   properties:
-    Category: Cleaning/Thursday
+    Category: Cleaning/Friday
     Priority: Normal
     Instructions: null
     Documentation: null
@@ -615,7 +615,7 @@ tasks:
     Task: 'Living Spaces: Fold couch blankets'
 - id: 2450ac25-7c56-80ff-af0e-f2e7ac951cae
   properties:
-    Category: Cleaning/Thursday
+    Category: Cleaning/Friday
     Priority: Normal
     Instructions: null
     Documentation: null
@@ -627,7 +627,7 @@ tasks:
     Task: 'Kitchen: Clean backsplash and cabinets'
 - id: 2450ac25-7c56-806e-ac3b-c71910a6adde
   properties:
-    Category: Cleaning/Thursday
+    Category: Cleaning/Friday
     Priority: Normal
     Instructions: null
     Documentation: null
@@ -651,7 +651,7 @@ tasks:
     Task: 'Kitchen: Clean out / organize fridge'
 - id: 2450ac25-7c56-8038-a25a-eab8f9e4bd8d
   properties:
-    Category: Cleaning/Thursday
+    Category: Cleaning/Friday
     Priority: Normal
     Instructions: null
     Documentation: null
@@ -663,7 +663,7 @@ tasks:
     Task: 'Whole house: Vacuum all floors'
 - id: 2450ac25-7c56-808a-b4cc-e9c4f5efc167
   properties:
-    Category: Cleaning/Thursday
+    Category: Cleaning/Friday
     Priority: Normal
     Instructions: null
     Documentation: null
@@ -675,7 +675,7 @@ tasks:
     Task: 'Common areas: Mop all floors'
 - id: 2450ac25-7c56-8011-8d4e-d23d3808a4bc
   properties:
-    Category: Cleaning/Thursday
+    Category: Cleaning/Friday
     Priority: Normal
     Instructions: null
     Documentation: null
@@ -687,7 +687,7 @@ tasks:
     Task: 'Kitchen: Wipe down front of appliances with stainless steel cleaner'
 - id: 2450ac25-7c56-80f1-8d88-c25fe7f5cf1d
   properties:
-    Category: Cleaning/Thursday
+    Category: Cleaning/Friday
     Priority: Normal
     Instructions: null
     Documentation: null
@@ -699,7 +699,7 @@ tasks:
     Task: 'Kitchen: Wipe down all cabinet, stove, fridge, and drawer handles'
 - id: 2450ac25-7c56-800c-9fb2-e2d02bee39a8
   properties:
-    Category: Cleaning/Thursday
+    Category: Cleaning/Friday
     Priority: Normal
     Instructions: null
     Documentation: null
@@ -711,7 +711,7 @@ tasks:
     Task: 'Kitchen: Run cleaning cycle on Nespresso'
 - id: 2450ac25-7c56-80a4-9ef1-ffd98702f4c9
   properties:
-    Category: Cleaning/Thursday
+    Category: Cleaning/Friday
     Priority: Normal
     Instructions: null
     Documentation: null
@@ -723,7 +723,7 @@ tasks:
     Task: 'Kitchen: Clean toaster oven interior'
 - id: 2450ac25-7c56-809b-8b04-c5eeb5d93a32
   properties:
-    Category: Cleaning/Thursday
+    Category: Cleaning/Friday
     Priority: Normal
     Instructions: null
     Documentation: null
@@ -739,7 +739,7 @@ tasks:
     Priority: Normal
     Instructions: null
     Documentation: null
-    Frequency: Monday/Thursday
+    Frequency: Monday/Friday
     Last Completed:
       start: '2025-08-28'
       end: null
@@ -799,7 +799,7 @@ tasks:
     Priority: Normal
     Instructions: null
     Documentation: null
-    Frequency: Monday/Thursday
+    Frequency: Monday/Friday
     Last Completed:
       start: '2025-08-28'
       end: null
@@ -835,7 +835,7 @@ tasks:
     Priority: Normal
     Instructions: null
     Documentation: null
-    Frequency: Monday/Thursday
+    Frequency: Monday/Friday
     Last Completed:
       start: '2025-09-02'
       end: null
