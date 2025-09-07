@@ -1,9 +1,11 @@
 import os
 import yaml
 import logging
+import argparse
 from notion_client import Client
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+from dateutil.parser import isoparse
 from datetime import datetime, timedelta, date
 import pytz
 
@@ -15,22 +17,12 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Load config
-with open("notion_config.yaml", "r") as f:
-    config = yaml.safe_load(f)
-
-NOTION_TOKEN = os.environ.get("NOTION_INTEGRATION_SECRET")
-if NOTION_TOKEN is None:
-    logger.error("NOTION_INTEGRATION_SECRET environment variable not set.")
-    raise EnvironmentError("NOTION_INTEGRATION_SECRET environment variable not set.")
-
-TEMPLATE_DB_ID = config.get("template_tasks_db_id")
-ACTIVE_DB_ID = config.get("active_tasks_db_id")
-if not TEMPLATE_DB_ID or not ACTIVE_DB_ID:
-    logger.error("Both template_tasks_db_id and active_tasks_db_id must be set in notion_config.yaml")
-    raise ValueError("Both template_tasks_db_id and active_tasks_db_id must be set in notion_config.yaml")
-
-notion = Client(auth=NOTION_TOKEN)
+# Runtime configuration (initialized in main)
+config = None
+NOTION_TOKEN = None
+TEMPLATE_DB_ID = None
+ACTIVE_DB_ID = None
+notion = None
 
 TEMPLATE_ID_PROPERTY = "TemplateId"
 
@@ -101,7 +93,7 @@ def sync_options(active_schema, template_schema):
                     }
                 )
 
-def build_active_task_properties(template_task, template_schema, active_schema):
+def build_active_task_properties(template_task, template_schema, active_schema, now_dt=None):
     mapping = {
         "Task": "Task",
         "Priority": "Priority",
@@ -135,7 +127,14 @@ def build_active_task_properties(template_task, template_schema, active_schema):
         default_status = next((o["name"] for o in status_options if o.get("name", "").lower() in ("not started", "todo", "to do")), status_options[0]["name"] if status_options else "Not Started")
         properties["Status"] = {"status": {"name": default_status}}
     if "CreationDate" in active_schema:
-        properties["CreationDate"] = {"date": {"start": datetime.utcnow().isoformat()}}
+        if now_dt is None:
+            current_iso = datetime.utcnow().isoformat()
+        else:
+            if now_dt.tzinfo is None:
+                current_iso = now_dt.replace(tzinfo=pytz.UTC).isoformat()
+            else:
+                current_iso = now_dt.astimezone(pytz.UTC).isoformat()
+        properties["CreationDate"] = {"date": {"start": current_iso}}
     return properties
 
 def get_active_tasks_for_template(template_id):
@@ -271,8 +270,8 @@ def get_uncompleted_active_tasks_for_template_and_category(template_id, category
     uncompleted = [page for page in results if not is_status_complete(page, active_schema)]
     return uncompleted
 
-def get_next_week_dates():
-    today = datetime.now(pytz.UTC).date()
+def get_next_week_dates(today=None):
+    today = today or datetime.now(pytz.UTC).date()
     # Find next Monday
     next_monday = today + timedelta(days=(7 - today.weekday()) % 7)
     return {
@@ -280,6 +279,51 @@ def get_next_week_dates():
         "Cooking/Tuesday": next_monday + timedelta(days=1),
         "Cleaning/Thursday": next_monday + timedelta(days=3),
     }
+
+def _parse_args():
+    parser = argparse.ArgumentParser(description="Create Active Tasks for the coming week from Notion templates.")
+    parser.add_argument("--config", "-c", default="notion_config.yaml", help="Path to YAML config with Notion DB IDs.")
+    parser.add_argument(
+        "--now",
+        help=(
+            "Override current time (ISO-8601). Examples: 2025-01-02, 2025-01-02T14:30:00Z, 2025-01-02T14:30:00+00:00"
+        ),
+    )
+    return parser.parse_args()
+
+def _initialise_from_config(config_path):
+    global config, NOTION_TOKEN, TEMPLATE_DB_ID, ACTIVE_DB_ID, notion
+    with open(config_path, "r") as f:
+        config = yaml.safe_load(f)
+
+    NOTION_TOKEN = os.environ.get("NOTION_INTEGRATION_SECRET")
+    if NOTION_TOKEN is None:
+        logger.error("NOTION_INTEGRATION_SECRET environment variable not set.")
+        raise EnvironmentError("NOTION_INTEGRATION_SECRET environment variable not set.")
+
+    TEMPLATE_DB_ID = config.get("template_tasks_db_id")
+    ACTIVE_DB_ID = config.get("active_tasks_db_id")
+    if not TEMPLATE_DB_ID or not ACTIVE_DB_ID:
+        logger.error(f"Both template_tasks_db_id and active_tasks_db_id must be set in {config_path}")
+        raise ValueError(f"Both template_tasks_db_id and active_tasks_db_id must be set in {config_path}")
+
+    notion = Client(auth=NOTION_TOKEN)
+
+def _parse_now(now_str):
+    if not now_str:
+        return None
+    s = now_str.strip()
+    try:
+        dt = isoparse(s)
+    except Exception:
+        # Fallback to date-only parsing
+        d = date.fromisoformat(s)
+        dt = datetime(d.year, d.month, d.day)
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=pytz.UTC)
+    else:
+        dt = dt.astimezone(pytz.UTC)
+    return dt
 
 def uncompleted_task_exists_for_date(template_id, category, planned_date, active_schema):
     # Check for an uncompleted Active Task for this template, category, and planned date
@@ -352,6 +396,9 @@ def is_task_due_for_week(template_task, week_start, planned_date):
         return True
 
 def main():
+    args = _parse_args()
+    _initialise_from_config(args.config)
+    anchor_now = _parse_now(args.now)
     logger.info("Fetching Template Tasks from Notion...")
     template_schema = get_template_schema()
     template_tasks = get_template_tasks()
@@ -371,7 +418,7 @@ def main():
     logger.info("Syncing select and status options in Active Tasks DB...")
     sync_options(active_schema, template_schema)
     logger.info("Creating Active Tasks for the coming week from templates...")
-    week_dates = get_next_week_dates()
+    week_dates = get_next_week_dates(anchor_now.date() if anchor_now else None)
     week_start = list(week_dates.values())[0]
     for template_task in template_tasks:
         freq = template_task["properties"].get("Frequency")
@@ -386,7 +433,7 @@ def main():
                 if uncompleted_task_exists_for_date(template_task["id"], category, planned_date, active_schema):
                     logger.info(f"Skipping creation for template id {template_task['id']} ('{task_name}') and category {category} for {planned_date} because uncompleted Active Task already exists.")
                     continue
-                properties = build_active_task_properties(template_task, template_schema, active_schema)
+                properties = build_active_task_properties(template_task, template_schema, active_schema, now_dt=anchor_now)
                 if TEMPLATE_ID_PROPERTY in active_schema:
                     properties[TEMPLATE_ID_PROPERTY] = {"rich_text": [{"text": {"content": template_task["id"]}}]}
                 properties["Category"] = {"select": {"name": category}}
@@ -402,7 +449,7 @@ def main():
                 if uncompleted_task_exists_for_date(template_task["id"], category, planned_date, active_schema):
                     logger.info(f"Skipping creation for template id {template_task['id']} ('{task_name}') and category {category} for {planned_date} because uncompleted Active Task already exists.")
                     continue
-                properties = build_active_task_properties(template_task, template_schema, active_schema)
+                properties = build_active_task_properties(template_task, template_schema, active_schema, now_dt=anchor_now)
                 if TEMPLATE_ID_PROPERTY in active_schema:
                     properties[TEMPLATE_ID_PROPERTY] = {"rich_text": [{"text": {"content": template_task["id"]}}]}
                 properties["Category"] = {"select": {"name": category}}
@@ -420,7 +467,7 @@ def main():
                 if uncompleted_task_exists_for_date(template_task["id"], category, planned_date, active_schema):
                     logger.info(f"Skipping creation for template id {template_task['id']} ('{task_name}') and category {category} for {planned_date} because uncompleted Active Task already exists.")
                     continue
-                properties = build_active_task_properties(template_task, template_schema, active_schema)
+                properties = build_active_task_properties(template_task, template_schema, active_schema, now_dt=anchor_now)
                 if TEMPLATE_ID_PROPERTY in active_schema:
                     properties[TEMPLATE_ID_PROPERTY] = {"rich_text": [{"text": {"content": template_task["id"]}}]}
                 properties["Category"] = {"select": {"name": category}}
