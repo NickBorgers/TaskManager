@@ -211,3 +211,6 @@ marimo/_lsp/
 __marimo__/
 
 template_tasks.yaml
+
+.test_token
+.test_token_openai
