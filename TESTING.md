@@ -1,8 +1,11 @@
-# Testing Guide for Daily Planned Date Review Script
+# Testing Guide
 
 ## Overview
 
-This project uses a **containerized testing approach** to ensure consistent, isolated, and reliable testing without requiring external dependencies like the Notion API or environment variables.
+This project uses a **containerized testing approach** to ensure consistent, isolated, and reliable testing. There are two types of tests:
+
+1. **Unit Tests** - Automated tests that mock external dependencies (Notion API, OpenAI API)
+2. **Integration Tests** - Manual tests that use real test databases and APIs
 
 ## 🐳 Containerized Testing Benefits
 
@@ -134,6 +137,80 @@ test:
   profiles: [test]
 ```
 
+## 🧪 Integration Testing
+
+Integration tests verify the system works with real Notion and OpenAI APIs using test databases.
+
+### Prerequisites
+1. **Test Notion Databases**: Create separate test databases in Notion
+2. **Test Configuration**: Create `test_notion_config.yaml` with test database IDs
+3. **API Tokens**: Store tokens in `.test_token` (Notion) and `.test_token_openai` (OpenAI)
+
+### File Setup
+```bash
+# Create test configuration
+cat > test_notion_config.yaml <<EOF
+template_tasks_db_id: "your_test_template_db_id"
+active_tasks_db_id: "your_test_active_db_id"
+EOF
+
+# Create token files
+echo "ntn_your_notion_test_token" > .test_token
+echo "sk-your_openai_test_token" > .test_token_openai
+```
+
+**Note**: These files are gitignored to prevent committing sensitive credentials.
+
+### Running Integration Tests
+
+Integration tests are in `test_comments_integration.py` and test:
+- Comment retrieval from Notion pages
+- Comment copying between pages
+- OpenAI GPT summarization
+- Adding comments to pages
+
+```bash
+# Build Docker test image
+docker build --target test -t taskmanager-test .
+
+# Run integration tests with test databases
+docker run --rm \
+  -v "${PWD}:/app" \
+  -e NOTION_INTEGRATION_SECRET="$(cat .test_token)" \
+  -e OPENAI_API_KEY="$(cat .test_token_openai)" \
+  taskmanager-test python test_comments_integration.py
+```
+
+### Integration Test Output
+```
+============================================================
+INTEGRATION TESTS FOR COMMENT FUNCTIONALITY
+============================================================
+
+TEST 1: Comment Retrieval
+✓ Successfully retrieved 0 comments
+
+TEST 2: Comment Copying
+✓ Successfully copied 1 comments
+
+TEST 3: Comment Summarization
+✓ Successfully generated summary:
+[GPT-generated summary appears here]
+
+TEST 4: Adding Comments
+✓ Successfully added comment
+
+============================================================
+✓ ALL TESTS PASSED
+============================================================
+```
+
+### Important Notes
+- Always use `test_notion_config.yaml` for integration tests (not `notion_config.yaml`)
+- Integration tests will write data to Notion (comments)
+- Verify you're using test databases before running
+- OpenAI API calls will incur costs (minimal for testing)
+
 ## 🔄 Continuous Integration
 
 ### GitHub Actions Workflow
@@ -144,6 +221,8 @@ test:
   2. Build test Docker image
   3. Run tests in container
   4. Upload coverage reports
+
+**Note**: CI only runs unit tests (mocked), not integration tests.
   5. Generate test summary
 
 ### CI/CD Benefits
