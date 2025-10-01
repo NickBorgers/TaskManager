@@ -8,6 +8,7 @@ from dateutil.relativedelta import relativedelta
 from dateutil.parser import isoparse
 from datetime import datetime, timedelta, date
 import pytz
+from openai import OpenAI
 
 # Setup logging
 logging.basicConfig(
@@ -22,7 +23,9 @@ config = None
 NOTION_TOKEN = None
 TEMPLATE_DB_ID = None
 ACTIVE_DB_ID = None
+COMPLETED_DB_ID = None
 notion = None
+openai_client = None
 
 TEMPLATE_ID_PROPERTY = "TemplateId"
 
@@ -190,6 +193,136 @@ def extract_completed_date(task):
             return date_val["start"]
     return None
 
+def get_page_comments(page_id):
+    """Retrieve all comments from a Notion page."""
+    logger.debug(f"Retrieving comments for page {page_id}")
+    try:
+        comments = []
+        response = notion.comments.list(block_id=page_id)
+        comments.extend(response.get("results", []))
+
+        # Handle pagination
+        while response.get("has_more"):
+            response = notion.comments.list(
+                block_id=page_id,
+                start_cursor=response.get("next_cursor")
+            )
+            comments.extend(response.get("results", []))
+
+        logger.debug(f"Found {len(comments)} comments for page {page_id}")
+        return comments
+    except Exception as e:
+        logger.error(f"Error retrieving comments for page {page_id}: {e}")
+        return []
+
+def copy_comments_to_page(source_page_id, target_page_id):
+    """Copy all comments from source page to target page."""
+    logger.info(f"Copying comments from {source_page_id} to {target_page_id}")
+    comments = get_page_comments(source_page_id)
+
+    for comment in comments:
+        try:
+            # Extract comment text
+            rich_text = comment.get("rich_text", [])
+            if rich_text:
+                # Create comment on target page
+                notion.comments.create(
+                    parent={"page_id": target_page_id},
+                    rich_text=rich_text
+                )
+                logger.debug(f"Copied comment to page {target_page_id}")
+        except Exception as e:
+            logger.error(f"Error copying comment to page {target_page_id}: {e}")
+
+    return len(comments)
+
+def summarize_comments_with_gpt(comments, task_name=None):
+    """Summarize a list of comments using OpenAI GPT to provide context for future task completion."""
+    if not comments or not openai_client:
+        return None
+
+    # Extract text from comments
+    comment_texts = []
+    for comment in comments:
+        rich_text = comment.get("rich_text", [])
+        for text_obj in rich_text:
+            if text_obj.get("type") == "text":
+                comment_texts.append(text_obj["text"]["content"])
+
+    if not comment_texts:
+        return None
+
+    combined_text = "\n\n".join(comment_texts)
+
+    try:
+        logger.info("Generating summary of comments using OpenAI GPT")
+
+        # Build the user prompt - include task name only if provided
+        if task_name:
+            user_prompt = f"Summarize the following comments about the task '{task_name}':\n\n{combined_text}"
+        else:
+            user_prompt = f"Summarize the following comments:\n\n{combined_text}"
+
+        response = openai_client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You are a concise assistant that summarizes comments. "
+                               "Only summarize what is in the comments provided. "
+                               "Do not add suggestions, advice, or information that isn't in the comments. "
+                               "Keep your summary brief and focused on what was actually written."
+                },
+                {
+                    "role": "user",
+                    "content": user_prompt
+                }
+            ],
+            temperature=0.3,
+            max_tokens=300
+        )
+
+        summary = response.choices[0].message.content
+        logger.info("Successfully generated summary")
+        return summary
+    except Exception as e:
+        logger.error(f"Error generating summary with OpenAI: {e}")
+        return None
+
+def add_comment_to_page(page_id, comment_text):
+    """Add a comment to a Notion page."""
+    try:
+        logger.debug(f"Adding comment to page {page_id}")
+        notion.comments.create(
+            parent={"page_id": page_id},
+            rich_text=[{"type": "text", "text": {"content": comment_text}}]
+        )
+        logger.debug(f"Successfully added comment to page {page_id}")
+    except Exception as e:
+        logger.error(f"Error adding comment to page {page_id}: {e}")
+
+def create_active_task_with_summary(template_task, properties, template_to_completed_task):
+    """Create an active task and add summarized comments if available."""
+    # Create the task
+    new_page = notion.pages.create(parent={"database_id": ACTIVE_DB_ID}, properties=properties)
+    new_page_id = new_page["id"]
+
+    # Add summarized comments from the template task (not the completed task)
+    # Template tasks accumulate comments from completed tasks, so we summarize those
+    template_id = template_task["id"]
+    task_name = template_task["properties"].get("Task")
+
+    # Get comments from the template task itself
+    template_comments = get_page_comments(template_id)
+    if template_comments:
+        summary = summarize_comments_with_gpt(template_comments, task_name=task_name)
+        if summary:
+            summary_with_header = f"📝 Summary from previous completions:\n\n{summary}"
+            add_comment_to_page(new_page_id, summary_with_header)
+            logger.info(f"Added summarized comments to new task {new_page_id}")
+
+    return new_page
+
 def update_template_last_completed(template_task_id, last_completed_date):
     logger.info(f"Updating Last Completed for template {template_task_id} to {last_completed_date}")
     notion.pages.update(
@@ -292,7 +425,7 @@ def _parse_args():
     return parser.parse_args()
 
 def _initialise_from_config(config_path):
-    global config, NOTION_TOKEN, TEMPLATE_DB_ID, ACTIVE_DB_ID, notion
+    global config, NOTION_TOKEN, TEMPLATE_DB_ID, ACTIVE_DB_ID, notion, openai_client
     with open(config_path, "r") as f:
         config = yaml.safe_load(f)
 
@@ -308,6 +441,14 @@ def _initialise_from_config(config_path):
         raise ValueError(f"Both template_tasks_db_id and active_tasks_db_id must be set in {config_path}")
 
     notion = Client(auth=NOTION_TOKEN)
+
+    # Initialize OpenAI client (optional, for comment summarization)
+    OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
+    if OPENAI_API_KEY:
+        openai_client = OpenAI(api_key=OPENAI_API_KEY)
+        logger.info("OpenAI client initialized for comment summarization")
+    else:
+        logger.warning("OPENAI_API_KEY not set. Comment summarization will be disabled.")
 
 def _parse_now(now_str):
     if not now_str:
@@ -404,17 +545,28 @@ def main():
     template_tasks = get_template_tasks()
     logger.info("Updating Last Completed dates for Template Tasks...")
     active_schema = get_active_schema()
+    # Track most recently completed task for each template (for comment summarization later)
+    template_to_completed_task = {}
+
     for template_task in template_tasks:
         active_tasks = get_active_tasks_for_template(template_task["id"])
         most_recent = None
+        most_recent_page_id = None
         for page in active_tasks:
             if is_status_complete(page, active_schema):
                 completed_date = extract_completed_date(page)
                 logger.debug(f"Task {page.get('id')} completed_date: {completed_date}")
                 if completed_date and (most_recent is None or completed_date > most_recent):
                     most_recent = completed_date
+                    most_recent_page_id = page.get("id")
         if most_recent:
             update_template_last_completed(template_task["id"], most_recent)
+            # Copy comments from most recently completed Active Task to Template Task
+            if most_recent_page_id:
+                logger.info(f"Copying comments from completed task {most_recent_page_id} to template {template_task['id']}")
+                copy_comments_to_page(most_recent_page_id, template_task["id"])
+                # Store for later summarization
+                template_to_completed_task[template_task["id"]] = most_recent_page_id
     logger.info("Syncing select and status options in Active Tasks DB...")
     sync_options(active_schema, template_schema)
     logger.info("Creating Active Tasks for the coming week from templates...")
@@ -438,7 +590,7 @@ def main():
                     properties[TEMPLATE_ID_PROPERTY] = {"rich_text": [{"text": {"content": template_task["id"]}}]}
                 properties["Category"] = {"select": {"name": category}}
                 properties["Planned Date"] = {"date": {"start": planned_date.isoformat()}}
-                notion.pages.create(parent={"database_id": ACTIVE_DB_ID}, properties=properties)
+                create_active_task_with_summary(template_task, properties, template_to_completed_task)
                 logger.info(f"Created Active Task '{task_name}' for template id {template_task['id']} with Category {category} and Planned Date {planned_date}")
         elif freq == "Daily":
             # For daily tasks, create for all three workdays
@@ -454,7 +606,7 @@ def main():
                     properties[TEMPLATE_ID_PROPERTY] = {"rich_text": [{"text": {"content": template_task["id"]}}]}
                 properties["Category"] = {"select": {"name": category}}
                 properties["Planned Date"] = {"date": {"start": planned_date.isoformat()}}
-                notion.pages.create(parent={"database_id": ACTIVE_DB_ID}, properties=properties)
+                create_active_task_with_summary(template_task, properties, template_to_completed_task)
                 logger.info(f"Created Active Task '{task_name}' for template id {template_task['id']} with Category {category} and Planned Date {planned_date}")
         else:
             # For other frequencies, match category to day
@@ -472,7 +624,7 @@ def main():
                     properties[TEMPLATE_ID_PROPERTY] = {"rich_text": [{"text": {"content": template_task["id"]}}]}
                 properties["Category"] = {"select": {"name": category}}
                 properties["Planned Date"] = {"date": {"start": planned_date.isoformat()}}
-                notion.pages.create(parent={"database_id": ACTIVE_DB_ID}, properties=properties)
+                create_active_task_with_summary(template_task, properties, template_to_completed_task)
                 logger.info(f"Created Active Task '{task_name}' for template id {template_task['id']} with Category {category} and Planned Date {planned_date}")
     logger.info("Done.")
 
