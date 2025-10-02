@@ -16,7 +16,7 @@ import pytz
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from scripts.weekly_rollover.create_active_tasks_from_templates import main as run_task_generation
-from scripts.daily_planned_date_review import main as run_daily_planned_date_review
+from scripts.daily_planned_date_review import main as daily_planned_date_review_main
 
 # Configure logging
 logging.basicConfig(
@@ -43,7 +43,7 @@ def run_daily_planned_date_review():
     """Run the daily planned date review"""
     try:
         logger.info("Starting daily planned date review...")
-        run_daily_planned_date_review()
+        daily_planned_date_review_main()
         logger.info("Daily planned date review completed successfully")
     except Exception as e:
         logger.error(f"Error during daily planned date review: {e}")
