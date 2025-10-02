@@ -514,31 +514,78 @@ class TestTaskDueLogic:
 
 class TestWeekDateCalculations:
     """Test week date calculation functionality"""
-    
+
     @freeze_time("2024-01-15")  # Monday
     def test_get_next_week_dates(self):
-        """Test next week date calculations"""
+        """Test week date calculations on Monday"""
         result = get_next_week_dates()
-        
-        # When today is Monday, next Monday is the same day (2024-01-15)
+
+        # When today is Monday, all work days are today or in the future
         expected_monday = date(2024, 1, 15)
         expected_tuesday = date(2024, 1, 16)
         expected_friday = date(2024, 1, 19)
-        
+
         assert result["Random/Monday"] == expected_monday
         assert result["Cooking/Tuesday"] == expected_tuesday
         assert result["Cleaning/Friday"] == expected_friday
-    
+
     @freeze_time("2024-01-19")  # Friday
     def test_get_next_week_dates_from_friday(self):
-        """Test next week date calculations when today is Friday"""
+        """Test week date calculations when today is Friday"""
         result = get_next_week_dates()
-        
-        # Should return next Monday (2024-01-22), Tuesday (2024-01-23), Friday (2024-01-26)
+
+        # When today is Friday, Monday and Tuesday have already passed
+        # Only Friday is returned (today)
+        assert "Random/Monday" not in result
+        assert "Cooking/Tuesday" not in result
+        assert result["Cleaning/Friday"] == date(2024, 1, 19)
+
+    @freeze_time("2024-01-18")  # Thursday
+    def test_get_next_week_dates_from_thursday(self):
+        """Test week date calculations when today is Thursday (mid-week)"""
+        result = get_next_week_dates()
+
+        # When today is Thursday, Monday and Tuesday have already passed
+        # Only Friday is returned (tomorrow)
+        assert "Random/Monday" not in result
+        assert "Cooking/Tuesday" not in result
+        assert result["Cleaning/Friday"] == date(2024, 1, 19)
+
+    @freeze_time("2024-01-16")  # Tuesday
+    def test_get_next_week_dates_from_tuesday(self):
+        """Test week date calculations when today is Tuesday"""
+        result = get_next_week_dates()
+
+        # When today is Tuesday, Monday has passed
+        # Only Tuesday (today) and Friday are returned
+        assert "Random/Monday" not in result
+        assert result["Cooking/Tuesday"] == date(2024, 1, 16)
+        assert result["Cleaning/Friday"] == date(2024, 1, 19)
+
+    @freeze_time("2024-01-20")  # Saturday
+    def test_get_next_week_dates_from_saturday(self):
+        """Test week date calculations when today is Saturday"""
+        result = get_next_week_dates()
+
+        # When today is Saturday, schedule for next week so employee can see work on Sunday
         expected_monday = date(2024, 1, 22)
         expected_tuesday = date(2024, 1, 23)
         expected_friday = date(2024, 1, 26)
-        
+
+        assert result["Random/Monday"] == expected_monday
+        assert result["Cooking/Tuesday"] == expected_tuesday
+        assert result["Cleaning/Friday"] == expected_friday
+
+    @freeze_time("2024-01-21")  # Sunday
+    def test_get_next_week_dates_from_sunday(self):
+        """Test week date calculations when today is Sunday"""
+        result = get_next_week_dates()
+
+        # When today is Sunday, schedule for next week (tomorrow)
+        expected_monday = date(2024, 1, 22)
+        expected_tuesday = date(2024, 1, 23)
+        expected_friday = date(2024, 1, 26)
+
         assert result["Random/Monday"] == expected_monday
         assert result["Cooking/Tuesday"] == expected_tuesday
         assert result["Cleaning/Friday"] == expected_friday

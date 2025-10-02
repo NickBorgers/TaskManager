@@ -405,13 +405,37 @@ def get_uncompleted_active_tasks_for_template_and_category(template_id, category
 
 def get_next_week_dates(today=None):
     today = today or datetime.now(pytz.UTC).date()
-    # Find next Monday
-    next_monday = today + timedelta(days=(7 - today.weekday()) % 7)
-    return {
-        "Random/Monday": next_monday,
-        "Cooking/Tuesday": next_monday + timedelta(days=1),
-        "Cleaning/Friday": next_monday + timedelta(days=4),
+    # Define the work week days (Monday=0, Tuesday=1, Friday=4)
+    work_days = {
+        "Random/Monday": 0,
+        "Cooking/Tuesday": 1,
+        "Cleaning/Friday": 4,
     }
+
+    # Find the Monday of the current week
+    current_monday = today - timedelta(days=today.weekday())
+
+    # If today is Saturday (5) or Sunday (6), schedule for next week
+    if today.weekday() >= 5:
+        next_monday = current_monday + timedelta(days=7)
+        result = {
+            "Random/Monday": next_monday,
+            "Cooking/Tuesday": next_monday + timedelta(days=1),
+            "Cleaning/Friday": next_monday + timedelta(days=4),
+        }
+        return result
+
+    # Otherwise, only include days that are today or in the future this week
+    result = {}
+    for category, day_offset in work_days.items():
+        # Calculate the date for this day in the current week
+        current_week_day = current_monday + timedelta(days=day_offset)
+
+        # Only include days that are today or in the future
+        if today <= current_week_day:
+            result[category] = current_week_day
+
+    return result
 
 def _parse_args():
     parser = argparse.ArgumentParser(description="Create Active Tasks for the coming week from Notion templates.")
