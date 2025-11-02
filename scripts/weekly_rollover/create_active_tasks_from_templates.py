@@ -585,6 +585,9 @@ def main():
                     most_recent_page_id = page.get("id")
         if most_recent:
             update_template_last_completed(template_task["id"], most_recent)
+            # Update in-memory template object to reflect the new Last Completed date
+            # This ensures is_task_due_for_week() uses current data, not stale data
+            template_task["properties"]["Last Completed"] = {"date": {"start": most_recent.isoformat()}}
             # Copy comments from most recently completed Active Task to Template Task
             if most_recent_page_id:
                 logger.info(f"Copying comments from completed task {most_recent_page_id} to template {template_task['id']}")

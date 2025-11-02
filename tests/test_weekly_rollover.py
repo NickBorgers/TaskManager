@@ -692,9 +692,25 @@ class TestTaskDueForWeek:
         }
         week_start = date(2024, 1, 22)
         planned_date = date(2024, 1, 25)
-        
+
         result = is_task_due_for_week(template_task, week_start, planned_date)
         assert result is False
+
+    def test_is_task_due_for_week_monthly_completed_same_week_prevents_duplicate(self):
+        """Test monthly task NOT due when completed only 7 days ago (regression test for Oct 20-27 bug)"""
+        template_task = {
+            "properties": {
+                "Frequency": "Monthly",
+                "Category": "Random/Monday",
+                "Last Completed": {"start": "2025-10-20"}  # Completed Oct 20
+            }
+        }
+        week_start = date(2025, 10, 27)  # Week of Oct 27
+        planned_date = date(2025, 10, 27)  # Planned for Oct 27
+
+        # Should NOT be due - only 7 days since last completion, needs 30 days
+        result = is_task_due_for_week(template_task, week_start, planned_date)
+        assert result is False, "Monthly task should not be due only 7 days after completion"
 
     def test_is_task_due_for_week_quarterly_last_completed_before_quarter(self):
         """Test quarterly task due for week when completed before quarter start"""
