@@ -212,5 +212,6 @@ __marimo__/
 
 template_tasks.yaml
 
+.token
 .test_token
 .test_token_openai
