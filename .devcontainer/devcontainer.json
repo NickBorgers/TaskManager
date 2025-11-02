@@ -1,8 +1,10 @@
 {
   "name": "TaskManager Python DevContainer",
-  "image": "mcr.microsoft.com/devcontainers/python:3.11",
+  "image": "mcr.microsoft.com/devcontainers/python:3.12",
   "features": {
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "lts"
+    }
   },
   "customizations": {
     "vscode": {
@@ -14,12 +16,8 @@
       ]
     }
   },
-  "postCreateCommand": "pip install -r test_requirements.txt",
-  "mounts": [
-    "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached"
-  ],
-  "workspaceFolder": "/workspace",
+  "postCreateCommand": "pip install -r test_requirements.txt && npm install -g @anthropic-ai/claude-code",
   "env": {
     "NOTION_INTEGRATION_SECRET": "${localEnv:NOTION_INTEGRATION_SECRET}"
   }
-} 
+}
