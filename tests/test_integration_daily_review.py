@@ -18,10 +18,14 @@ Run with: pytest tests/test_integration_daily_review.py -v
 
 import pytest
 import os
+import sys
 import yaml
 from datetime import datetime, date, timedelta
 import pytz
-from notion_client import Client
+
+# Add parent directory to path to import utils
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from utils.notion_client import create_rate_limited_client
 
 # Skip all tests if test token not available
 pytestmark = pytest.mark.skipif(
@@ -47,7 +51,7 @@ def notion_client():
     token = os.environ.get("NOTION_INTEGRATION_SECRET")
     if not token:
         pytest.skip("NOTION_INTEGRATION_SECRET not set")
-    return Client(auth=token)
+    return create_rate_limited_client(auth=token)
 
 
 @pytest.fixture(scope="module")

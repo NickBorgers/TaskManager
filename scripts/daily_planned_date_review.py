@@ -6,12 +6,16 @@ Sets the planned date to the Thursday of the coming week.
 """
 
 import os
+import sys
 import yaml
 import logging
 import argparse
-from notion_client import Client
 from datetime import datetime, timedelta, date
 import pytz
+
+# Add parent directory to path to import utils
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from utils.notion_client import create_rate_limited_client
 
 # Setup logging
 logging.basicConfig(
@@ -302,7 +306,7 @@ def main():
         raise ValueError(f"active_tasks_db_id must be set in {args.config}")
 
     # Initialize Notion client
-    notion = Client(auth=NOTION_TOKEN)
+    notion = create_rate_limited_client(auth=NOTION_TOKEN)
 
     logger.info("Starting daily planned date review...")
 
