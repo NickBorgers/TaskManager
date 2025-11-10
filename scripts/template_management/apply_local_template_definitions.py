@@ -1,6 +1,10 @@
 import os
+import sys
 import yaml
-from notion_client import Client
+
+# Add parent directory to path to import utils
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
+from utils.notion_client import create_rate_limited_client
 
 # Load config from YAML
 with open("notion_config.yaml", "r") as f:
@@ -14,7 +18,7 @@ DATABASE_ID = config.get("template_tasks_db_id")
 if DATABASE_ID is None:
     raise ValueError("template_tasks_db_id not found in notion_config.yaml")
 
-notion = Client(auth=NOTION_TOKEN)
+notion = create_rate_limited_client(auth=NOTION_TOKEN)
 
 # Load backup
 with open("template_tasks.yaml", "r", encoding="utf-8") as f:

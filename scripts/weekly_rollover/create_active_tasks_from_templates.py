@@ -1,14 +1,18 @@
 import os
+import sys
 import yaml
 import logging
 import argparse
-from notion_client import Client
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from dateutil.parser import isoparse
 from datetime import datetime, timedelta, date
 import pytz
 from openai import OpenAI
+
+# Add parent directory to path to import utils
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
+from utils.notion_client import create_rate_limited_client
 
 # Setup logging
 logging.basicConfig(
@@ -464,7 +468,7 @@ def _initialise_from_config(config_path):
         logger.error(f"Both template_tasks_db_id and active_tasks_db_id must be set in {config_path}")
         raise ValueError(f"Both template_tasks_db_id and active_tasks_db_id must be set in {config_path}")
 
-    notion = Client(auth=NOTION_TOKEN)
+    notion = create_rate_limited_client(auth=NOTION_TOKEN)
 
     # Initialize OpenAI client (optional, for comment summarization)
     OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
