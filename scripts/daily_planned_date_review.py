@@ -8,6 +8,7 @@ Sets the planned date to the Thursday of the coming week.
 import os
 import yaml
 import logging
+import argparse
 from notion_client import Client
 from datetime import datetime, timedelta, date
 import pytz
@@ -20,22 +21,9 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Load config
-with open("notion_config.yaml", "r") as f:
-    config = yaml.safe_load(f)
-
-NOTION_TOKEN = os.environ.get("NOTION_INTEGRATION_SECRET")
-if NOTION_TOKEN is None:
-    logger.error("NOTION_INTEGRATION_SECRET environment variable not set.")
-    raise EnvironmentError("NOTION_INTEGRATION_SECRET environment variable not set.")
-
-ACTIVE_DB_ID = config.get("active_tasks_db_id")
-if not ACTIVE_DB_ID:
-    logger.error("active_tasks_db_id must be set in notion_config.yaml")
-    raise ValueError("active_tasks_db_id must be set in notion_config.yaml")
-
-notion = Client(auth=NOTION_TOKEN)
-
+# Global variables to be initialized in main()
+notion = None
+ACTIVE_DB_ID = None
 TEMPLATE_ID_PROPERTY = "TemplateId"
 
 def get_active_schema():
@@ -281,8 +269,43 @@ def update_task_category(task_id, category):
 
 def main():
     """Main function to review and update planned dates, categories, and old tasks"""
+    global notion, ACTIVE_DB_ID
+
+    # Parse command line arguments
+    parser = argparse.ArgumentParser(description="Daily Planned Date Review for Notion Home Task Manager")
+    parser.add_argument(
+        "--config",
+        type=str,
+        default="notion_config.yaml",
+        help="Path to the configuration YAML file (default: notion_config.yaml)"
+    )
+    args = parser.parse_args()
+
+    # Load config
+    if not os.path.exists(args.config):
+        logger.error(f"Configuration file not found: {args.config}")
+        raise FileNotFoundError(f"Configuration file not found: {args.config}")
+
+    with open(args.config, "r") as f:
+        config = yaml.safe_load(f)
+
+    # Get Notion token
+    NOTION_TOKEN = os.environ.get("NOTION_INTEGRATION_SECRET")
+    if NOTION_TOKEN is None:
+        logger.error("NOTION_INTEGRATION_SECRET environment variable not set.")
+        raise EnvironmentError("NOTION_INTEGRATION_SECRET environment variable not set.")
+
+    # Get active database ID
+    ACTIVE_DB_ID = config.get("active_tasks_db_id")
+    if not ACTIVE_DB_ID:
+        logger.error(f"active_tasks_db_id must be set in {args.config}")
+        raise ValueError(f"active_tasks_db_id must be set in {args.config}")
+
+    # Initialize Notion client
+    notion = Client(auth=NOTION_TOKEN)
+
     logger.info("Starting daily planned date review...")
-    
+
     try:
         total_updated = 0
         
