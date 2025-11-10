@@ -712,6 +712,33 @@ class TestTaskDueForWeek:
         result = is_task_due_for_week(template_task, week_start, planned_date)
         assert result is False, "Monthly task should not be due only 7 days after completion"
 
+    def test_is_task_due_for_week_monthly_with_wrong_nested_structure(self):
+        """Test monthly task with incorrectly nested Last Completed structure (bug in line 590)
+
+        This tests the bug where line 590 updates the in-memory template with:
+          {"date": {"start": "2025-10-20"}}
+        instead of:
+          {"start": "2025-10-20"}
+
+        This causes is_task_due_for_week to fail to extract the date and treat
+        the task as never completed, creating duplicates.
+        """
+        template_task = {
+            "properties": {
+                "Frequency": "Monthly",
+                "Category": "Random/Monday",
+                # WRONG structure - has extra "date" wrapper like line 590 creates
+                "Last Completed": {"date": {"start": "2025-10-20"}}
+            }
+        }
+        week_start = date(2025, 10, 27)  # Week of Oct 27
+        planned_date = date(2025, 10, 27)  # Planned for Oct 27
+
+        # With the bug, this returns True (incorrectly thinks task never completed)
+        # After fix, should return False (recognizes recent completion)
+        result = is_task_due_for_week(template_task, week_start, planned_date)
+        assert result is False, "Monthly task should not be due only 7 days after completion, even with nested date structure"
+
     def test_is_task_due_for_week_quarterly_last_completed_before_quarter(self):
         """Test quarterly task due for week when completed before quarter start"""
         template_task = {
