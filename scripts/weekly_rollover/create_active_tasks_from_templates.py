@@ -522,7 +522,13 @@ def is_task_due_for_week(template_task, week_start, planned_date):
     freq = props.get("Frequency")
     last_completed = props.get("Last Completed")
     if last_completed and isinstance(last_completed, dict):
+        # Handle both structures:
+        # Correct: {"start": "2025-10-20"} (from get_template_tasks line 65)
+        # Wrong: {"date": {"start": "2025-10-20"}} (from old line 590 bug)
         last_completed_date = last_completed.get("start")
+        if not last_completed_date and "date" in last_completed:
+            # Handle nested structure from the old bug
+            last_completed_date = last_completed["date"].get("start") if isinstance(last_completed["date"], dict) else None
         if last_completed_date:
             last_completed_dt = datetime.fromisoformat(last_completed_date)
             if last_completed_dt.tzinfo is None:
@@ -587,7 +593,8 @@ def main():
             update_template_last_completed(template_task["id"], most_recent)
             # Update in-memory template object to reflect the new Last Completed date
             # This ensures is_task_due_for_week() uses current data, not stale data
-            template_task["properties"]["Last Completed"] = {"date": {"start": most_recent}}
+            # Structure must match how get_template_tasks() extracts dates (line 65: v["date"])
+            template_task["properties"]["Last Completed"] = {"start": most_recent}
             # Copy comments from most recently completed Active Task to Template Task
             if most_recent_page_id:
                 logger.info(f"Copying comments from completed task {most_recent_page_id} to template {template_task['id']}")
