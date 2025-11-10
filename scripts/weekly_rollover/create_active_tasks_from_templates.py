@@ -590,6 +590,14 @@ def main():
                     most_recent = completed_date
                     most_recent_page_id = page.get("id")
         if most_recent:
+            # Normalize date to include timezone if it doesn't already
+            # Notion API returns dates as either "2025-08-21" or "2025-08-21T00:00:00.000Z"
+            if 'T' not in most_recent and 'Z' not in most_recent and '+' not in most_recent:
+                # Date-only format, convert to datetime with UTC timezone
+                date_obj = datetime.fromisoformat(most_recent)
+                date_obj = date_obj.replace(tzinfo=pytz.UTC)
+                most_recent = date_obj.isoformat()
+
             update_template_last_completed(template_task["id"], most_recent)
             # Update in-memory template object to reflect the new Last Completed date
             # This ensures is_task_due_for_week() uses current data, not stale data
