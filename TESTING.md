@@ -188,15 +188,12 @@ The v1.6.2 isoformat bug occurred because:
 # Set environment variables for local testing
 # Option 1: Use standard variable names
 export NOTION_INTEGRATION_SECRET="your_notion_test_token"
-export OPENAI_API_KEY="your_openai_test_token"  # Optional
 
 # Option 2: Use _TEST suffix (validation script accepts both)
 export NOTION_INTEGRATION_SECRET_TEST="your_notion_test_token"
-export OPENAI_API_KEY_TEST="your_openai_test_token"  # Optional
 
 # Or use token files if you have them
 export NOTION_INTEGRATION_SECRET="$(cat .test_token)"
-export OPENAI_API_KEY="$(cat .test_token_openai)"
 ```
 
 **Note**: The validation script automatically uses `*_TEST` variants if the regular ones aren't set.
@@ -363,7 +360,6 @@ release-validation:
 To enable integration tests and release validation, add these secrets to your repository:
 
 - `NOTION_INTEGRATION_SECRET_TEST` - Notion token for test databases
-- `OPENAI_API_KEY_TEST` - OpenAI token for test summarization (optional)
 
 **Note:** Test database IDs are already configured in `test_notion_config.yaml` (checked into the repo), so they don't need to be added as secrets.
 
@@ -387,7 +383,6 @@ This script performs a complete pre-release check:
 ```bash
 # Set environment variables (use either naming convention)
 export NOTION_INTEGRATION_SECRET_TEST="$(cat .test_token)"
-export OPENAI_API_KEY_TEST="$(cat .test_token_openai)"
 
 # Run validation script
 ./scripts/validate_release.sh
