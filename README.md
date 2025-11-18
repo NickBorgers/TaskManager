@@ -18,8 +18,6 @@ The system consists of two Notion databases:
 - **Themed Workdays**: Automatic categorization based on work schedule (Monday: Random/Errands, Tuesday: Cooking, Friday: Cleaning)
 - **Week-Ahead Planning**: Generate all tasks for the coming week in advance
 - **Completion Tracking**: Automatically update template completion dates based on active task status
-- **Comment Management**: Automatically copies comments from completed Active Tasks to Template Tasks
-- **AI-Powered Summarization**: Uses OpenAI GPT to summarize comments from completed tasks and adds them to new Active Tasks as context
 - **Duplicate Prevention**: Avoid creating duplicate active tasks
 - **Live Notion Integration**: Direct API integration for real-time updates
 - **Automated Scheduling**: Built-in scheduler runs weekly on Saturdays at 9:00 AM and daily at 6:00 AM
@@ -100,10 +98,7 @@ active_tasks_db_id: "your_active_database_id_here"
 5. Set environment variables:
 ```bash
 export NOTION_INTEGRATION_TOKEN="your_integration_token_here"
-export OPENAI_API_KEY="your_openai_api_key_here"  # Optional, for comment summarization
 ```
-
-**Note**: The `OPENAI_API_KEY` is optional. If not provided, the system will still work but comment summarization will be disabled.
 
 ### ⚠️ Important: Database Configuration Required
 
@@ -210,12 +205,9 @@ docker run -d \
   -v $(pwd)/logs:/app/logs \
   -v $(pwd)/state:/app/state \
   -e NOTION_INTEGRATION_TOKEN="your_integration_token_here" \
-  -e OPENAI_API_KEY="your_openai_api_key_here" \
   --restart unless-stopped \
   notion-home-task-manager
 ```
-
-**Note**: The `OPENAI_API_KEY` environment variable is optional. If not provided, comment summarization will be disabled but all other functionality will continue to work.
 
 #### Docker Compose (Continuous Operation)
 ```bash
@@ -232,11 +224,9 @@ docker-compose down
 This script:
 1. Fetches all template tasks from Notion
 2. Updates "Last Completed" dates based on completed active tasks
-3. Copies comments from the most recently completed Active Task to the Template Task
-4. Syncs select and status options between databases
-5. Creates active tasks for the coming week based on frequency and completion history
-6. Summarizes comments from completed tasks using OpenAI GPT and adds them to new Active Tasks
-7. Avoids creating duplicates for existing uncompleted tasks
+3. Syncs select and status options between databases
+4. Creates active tasks for the coming week based on frequency and completion history
+5. Avoids creating duplicates for existing uncompleted tasks
 
 ### Frequency Logic
 
@@ -363,7 +353,6 @@ For detailed testing documentation, see [TESTING.md](TESTING.md).
 - `python-dateutil`: Date manipulation and recurrence logic
 - `pytz`: Timezone handling
 - `schedule`: Task scheduling for automated runs
-- `openai`: OpenAI API integration for comment summarization (optional)
 
 ## Logging
 

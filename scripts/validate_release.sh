@@ -77,12 +77,6 @@ else
     print_success "NOTION_INTEGRATION_SECRET is set"
 fi
 
-# Check for OpenAI API key (optional)
-if [ -z "$OPENAI_API_KEY" ] && [ -n "$OPENAI_API_KEY_TEST" ]; then
-    export OPENAI_API_KEY="$OPENAI_API_KEY_TEST"
-    print_success "Using OPENAI_API_KEY_TEST (optional)"
-fi
-
 if [ ! -f "test_notion_config.yaml" ]; then
     print_warning "test_notion_config.yaml not found - integration tests will be skipped"
 else

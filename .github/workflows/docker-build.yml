@@ -60,7 +60,6 @@ jobs:
     - name: Run integration tests
       env:
         NOTION_INTEGRATION_SECRET: ${{ secrets.NOTION_INTEGRATION_SECRET_TEST }}
-        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY_TEST }}
       run: |
         pytest tests/test_integration_weekly_rollover.py tests/test_integration_daily_review.py -v --tb=short
 
