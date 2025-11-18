@@ -62,6 +62,8 @@ jobs:
       env:
         NOTION_INTEGRATION_SECRET: ${{ secrets.NOTION_INTEGRATION_SECRET_TEST }}
       run: |
+        # Integration tests include automatic rate limiting via conftest.py fixtures
+        # to prevent hitting Notion's API limits (3 req/sec, 2700 calls per 15 min)
         pytest tests/test_integration_weekly_rollover.py tests/test_integration_daily_review.py -v --tb=short
 
     - name: Cleanup test data

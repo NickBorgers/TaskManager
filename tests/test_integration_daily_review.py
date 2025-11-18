@@ -63,19 +63,15 @@ def active_db_id(test_config):
 class TestDailyReviewExecution:
     """Test that daily review script runs successfully"""
 
-    def test_script_runs_without_errors(self, test_config):
+    def test_script_runs_without_errors(self, test_config, rate_limited_script_runner):
         """Test daily review script executes successfully"""
-        import subprocess
-
-        result = subprocess.run(
+        result = rate_limited_script_runner(
             [
                 "python3",
                 "scripts/daily_planned_date_review.py",
                 "--config", "test_notion_config.yaml"
             ],
-            capture_output=True,
-            text=True,
-            env={**os.environ, "NOTION_INTEGRATION_SECRET": os.environ.get("NOTION_INTEGRATION_SECRET")}
+            estimate_api_calls=30
         )
 
         # Check that script completed without errors
@@ -86,19 +82,15 @@ class TestDailyReviewExecution:
         assert "completed" in output.lower() or "done" in output.lower(), \
             "Script did not report completion"
 
-    def test_script_handles_empty_database(self, test_config):
+    def test_script_handles_empty_database(self, test_config, rate_limited_script_runner):
         """Test that script handles database with no tasks gracefully"""
-        import subprocess
-
-        result = subprocess.run(
+        result = rate_limited_script_runner(
             [
                 "python3",
                 "scripts/daily_planned_date_review.py",
                 "--config", "test_notion_config.yaml"
             ],
-            capture_output=True,
-            text=True,
-            env={**os.environ, "NOTION_INTEGRATION_SECRET": os.environ.get("NOTION_INTEGRATION_SECRET")}
+            estimate_api_calls=20
         )
 
         # Should complete successfully even with no tasks
@@ -133,13 +125,11 @@ class TestTasksWithoutPlannedDates:
         assert "results" in response
         print(f"Found {len(response['results'])} tasks without planned dates")
 
-    def test_planned_date_assignment_logic(self, notion_client, active_db_id):
+    def test_planned_date_assignment_logic(self, notion_client, active_db_id, rate_limited_script_runner):
         """
         Test that if we have tasks without planned dates,
         after running the script they get assigned next Thursday
         """
-        import subprocess
-
         # Query for tasks without planned dates before
         filter_query = {
             "and": [
@@ -164,15 +154,13 @@ class TestTasksWithoutPlannedDates:
         print(f"Tasks without planned dates before: {before_count}")
 
         # Run the daily review script
-        result = subprocess.run(
+        result = rate_limited_script_runner(
             [
                 "python3",
                 "scripts/daily_planned_date_review.py",
                 "--config", "test_notion_config.yaml"
             ],
-            capture_output=True,
-            text=True,
-            env={**os.environ, "NOTION_INTEGRATION_SECRET": os.environ.get("NOTION_INTEGRATION_SECRET")}
+            estimate_api_calls=30
         )
 
         assert result.returncode == 0, f"Script failed:\n{result.stderr}"
@@ -219,13 +207,11 @@ class TestTasksWithoutCategories:
         assert "results" in response
         print(f"Found {len(response['results'])} tasks without categories")
 
-    def test_category_assignment_logic(self, notion_client, active_db_id):
+    def test_category_assignment_logic(self, notion_client, active_db_id, rate_limited_script_runner):
         """
         Test that tasks without categories get assigned Random/Monday
         after running the script
         """
-        import subprocess
-
         # Query for tasks without categories before
         filter_query = {
             "and": [
@@ -250,15 +236,13 @@ class TestTasksWithoutCategories:
         print(f"Tasks without categories before: {before_count}")
 
         # Run the daily review script
-        result = subprocess.run(
+        result = rate_limited_script_runner(
             [
                 "python3",
                 "scripts/daily_planned_date_review.py",
                 "--config", "test_notion_config.yaml"
             ],
-            capture_output=True,
-            text=True,
-            env={**os.environ, "NOTION_INTEGRATION_SECRET": os.environ.get("NOTION_INTEGRATION_SECRET")}
+            estimate_api_calls=30
         )
 
         assert result.returncode == 0, f"Script failed:\n{result.stderr}"
@@ -319,12 +303,10 @@ class TestOldIncompleteTasks:
                     assert planned_date < datetime.now(pytz.UTC).date(), \
                         f"Task {task['id']} has future planned date but matched old task query"
 
-    def test_old_task_rescheduling(self, notion_client, active_db_id):
+    def test_old_task_rescheduling(self, notion_client, active_db_id, rate_limited_script_runner):
         """
         Test that old incomplete tasks get rescheduled to next Thursday
         """
-        import subprocess
-
         # Query for old incomplete tasks before (not completed, planned date in past)
         yesterday = (datetime.now(pytz.UTC).date() - timedelta(days=1))
 
@@ -360,15 +342,13 @@ class TestOldIncompleteTasks:
         print(f"Old incomplete tasks before: {before_count}")
 
         # Run the daily review script
-        result = subprocess.run(
+        result = rate_limited_script_runner(
             [
                 "python3",
                 "scripts/daily_planned_date_review.py",
                 "--config", "test_notion_config.yaml"
             ],
-            capture_output=True,
-            text=True,
-            env={**os.environ, "NOTION_INTEGRATION_SECRET": os.environ.get("NOTION_INTEGRATION_SECRET")}
+            estimate_api_calls=30
         )
 
         assert result.returncode == 0, f"Script failed:\n{result.stderr}"
@@ -420,24 +400,20 @@ class TestDataTypeConsistency:
 class TestEndToEndWorkflow:
     """Test complete daily review workflow"""
 
-    def test_full_daily_review_execution(self, test_config):
+    def test_full_daily_review_execution(self, test_config, rate_limited_script_runner):
         """
         Execute full daily review and verify:
         1. Script completes without errors
         2. All processing sections execute
         3. Summary information is logged
         """
-        import subprocess
-
-        result = subprocess.run(
+        result = rate_limited_script_runner(
             [
                 "python3",
                 "scripts/daily_planned_date_review.py",
                 "--config", "test_notion_config.yaml"
             ],
-            capture_output=True,
-            text=True,
-            env={**os.environ, "NOTION_INTEGRATION_SECRET": os.environ.get("NOTION_INTEGRATION_SECRET")}
+            estimate_api_calls=30
         )
 
         # Verify successful execution
@@ -465,24 +441,20 @@ class TestEndToEndWorkflow:
         assert "completed" in output.lower() or "done" in output.lower(), \
             "Script should report completion"
 
-    def test_multiple_consecutive_runs_idempotent(self, test_config):
+    def test_multiple_consecutive_runs_idempotent(self, test_config, rate_limited_script_runner):
         """
         Test that running daily review multiple times consecutively
         is idempotent (doesn't cause errors or unexpected changes)
         """
-        import subprocess
-
         # Run twice
         for run_num in range(2):
-            result = subprocess.run(
+            result = rate_limited_script_runner(
                 [
                     "python3",
                     "scripts/daily_planned_date_review.py",
                     "--config", "test_notion_config.yaml"
                 ],
-                capture_output=True,
-                text=True,
-                env={**os.environ, "NOTION_INTEGRATION_SECRET": os.environ.get("NOTION_INTEGRATION_SECRET")}
+                estimate_api_calls=30
             )
 
             assert result.returncode == 0, \
@@ -494,23 +466,19 @@ class TestEndToEndWorkflow:
 class TestThursdayCalculation:
     """Test that next Thursday calculation works correctly"""
 
-    def test_tasks_assigned_thursday_dates(self, notion_client, active_db_id):
+    def test_tasks_assigned_thursday_dates(self, notion_client, active_db_id, rate_limited_script_runner):
         """
         If tasks were updated, verify they have Thursday dates
         (weekday() == 3)
         """
-        import subprocess
-
         # Run the daily review
-        result = subprocess.run(
+        result = rate_limited_script_runner(
             [
                 "python3",
                 "scripts/daily_planned_date_review.py",
                 "--config", "test_notion_config.yaml"
             ],
-            capture_output=True,
-            text=True,
-            env={**os.environ, "NOTION_INTEGRATION_SECRET": os.environ.get("NOTION_INTEGRATION_SECRET")}
+            estimate_api_calls=30
         )
 
         assert result.returncode == 0, f"Script failed:\n{result.stderr}"

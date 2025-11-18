@@ -140,21 +140,17 @@ class TestNotionAPIDataTypes:
 class TestWorkflowWithNowParameter:
     """Test weekly rollover with --now parameter"""
 
-    def test_script_runs_with_now_parameter(self, test_config):
+    def test_script_runs_with_now_parameter(self, test_config, rate_limited_script_runner):
         """Test that script runs successfully with --now parameter"""
-        import subprocess
-
         # Run the script with --now set to a specific Saturday
-        result = subprocess.run(
+        result = rate_limited_script_runner(
             [
                 "python3",
                 "scripts/weekly_rollover/create_active_tasks_from_templates.py",
                 "--config", "test_notion_config.yaml",
                 "--now", "2025-11-15T09:00:00Z"  # Saturday at 9AM
             ],
-            capture_output=True,
-            text=True,
-            env={**os.environ, "NOTION_INTEGRATION_SECRET": os.environ.get("NOTION_INTEGRATION_SECRET")}
+            estimate_api_calls=50
         )
 
         # Check that script completed without errors
@@ -163,10 +159,8 @@ class TestWorkflowWithNowParameter:
         assert "Done." in result.stderr or "Done." in result.stdout, \
             "Script did not complete successfully"
 
-    def test_script_handles_different_dates(self, test_config):
+    def test_script_handles_different_dates(self, test_config, rate_limited_script_runner):
         """Test script with various --now parameter formats"""
-        import subprocess
-
         test_dates = [
             "2025-11-15",  # Date only
             "2025-11-15T09:00:00Z",  # Full ISO with Z
@@ -174,16 +168,14 @@ class TestWorkflowWithNowParameter:
         ]
 
         for test_date in test_dates:
-            result = subprocess.run(
+            result = rate_limited_script_runner(
                 [
                     "python3",
                     "scripts/weekly_rollover/create_active_tasks_from_templates.py",
                     "--config", "test_notion_config.yaml",
                     "--now", test_date
                 ],
-                capture_output=True,
-                text=True,
-                env={**os.environ, "NOTION_INTEGRATION_SECRET": os.environ.get("NOTION_INTEGRATION_SECRET")}
+                estimate_api_calls=50
             )
 
             assert result.returncode == 0, \
@@ -193,13 +185,11 @@ class TestWorkflowWithNowParameter:
 class TestDuplicateTaskPrevention:
     """Test that duplicate tasks are not created"""
 
-    def test_no_duplicates_for_same_date(self, notion_client, template_db_id, active_db_id):
+    def test_no_duplicates_for_same_date(self, notion_client, template_db_id, active_db_id, rate_limited_script_runner):
         """
         Test that running rollover multiple times for the same date
         doesn't create duplicate tasks
         """
-        import subprocess
-
         # Use a specific test date
         test_date = "2025-12-06T09:00:00Z"  # Saturday
 
@@ -207,21 +197,19 @@ class TestDuplicateTaskPrevention:
         before_response = notion_client.databases.query(database_id=active_db_id)
         before_count = len(before_response["results"])
 
-        # Run rollover twice with same date
-        for _ in range(2):
-            result = subprocess.run(
+        # Run rollover twice with same date (this is critical - tests duplicate prevention)
+        for run_num in range(2):
+            result = rate_limited_script_runner(
                 [
                     "python3",
                     "scripts/weekly_rollover/create_active_tasks_from_templates.py",
                     "--config", "test_notion_config.yaml",
                     "--now", test_date
                 ],
-                capture_output=True,
-                text=True,
-                env={**os.environ, "NOTION_INTEGRATION_SECRET": os.environ.get("NOTION_INTEGRATION_SECRET")}
+                estimate_api_calls=50
             )
 
-            assert result.returncode == 0, f"Script failed:\n{result.stderr}"
+            assert result.returncode == 0, f"Script failed on run {run_num + 1}:\n{result.stderr}"
 
         # Get count of active tasks after
         after_response = notion_client.databases.query(database_id=active_db_id)
@@ -312,7 +300,7 @@ class TestLastCompletedUpdate:
 class TestEndToEndWorkflow:
     """Test complete workflow from templates to active tasks"""
 
-    def test_full_workflow_execution(self, notion_client, template_db_id, active_db_id):
+    def test_full_workflow_execution(self, notion_client, template_db_id, active_db_id, rate_limited_script_runner):
         """
         Execute a full weekly rollover and verify:
         1. Templates are fetched
@@ -320,21 +308,17 @@ class TestEndToEndWorkflow:
         3. Properties are mapped correctly
         4. No errors occur
         """
-        import subprocess
-
         # Run with a specific test date
         test_date = "2025-12-13T09:00:00Z"  # Saturday
 
-        result = subprocess.run(
+        result = rate_limited_script_runner(
             [
                 "python3",
                 "scripts/weekly_rollover/create_active_tasks_from_templates.py",
                 "--config", "test_notion_config.yaml",
                 "--now", test_date
             ],
-            capture_output=True,
-            text=True,
-            env={**os.environ, "NOTION_INTEGRATION_SECRET": os.environ.get("NOTION_INTEGRATION_SECRET")}
+            estimate_api_calls=50
         )
 
         # Verify successful execution
@@ -347,23 +331,19 @@ class TestEndToEndWorkflow:
         assert "Creating Active Tasks" in output or "Created Active Task" in output or "Done." in output, \
             "Active tasks not created"
 
-    def test_workflow_handles_empty_database(self, test_config):
+    def test_workflow_handles_empty_database(self, test_config, rate_limited_script_runner):
         """
         Test that workflow handles empty template database gracefully
         (This would be a separate test database with no templates)
         """
-        import subprocess
-
-        result = subprocess.run(
+        result = rate_limited_script_runner(
             [
                 "python3",
                 "scripts/weekly_rollover/create_active_tasks_from_templates.py",
                 "--config", "test_notion_config.yaml",
                 "--now", "2025-12-20T09:00:00Z"
             ],
-            capture_output=True,
-            text=True,
-            env={**os.environ, "NOTION_INTEGRATION_SECRET": os.environ.get("NOTION_INTEGRATION_SECRET")}
+            estimate_api_calls=20  # Fewer calls since empty database
         )
 
         # Should complete successfully even with no templates
@@ -374,26 +354,22 @@ class TestEndToEndWorkflow:
 class TestFrequencyLogic:
     """Test different task frequencies work correctly"""
 
-    def test_daily_tasks_created_for_workdays(self, notion_client, template_db_id, active_db_id):
+    def test_daily_tasks_created_for_workdays(self, notion_client, template_db_id, active_db_id, rate_limited_script_runner):
         """
         Test that Daily frequency tasks are created for workdays
         (Monday, Tuesday, Friday based on get_next_week_dates)
         """
-        import subprocess
-
         # Run for a Saturday (should create tasks for next week's workdays)
         test_date = "2025-12-20T09:00:00Z"  # Saturday
 
-        result = subprocess.run(
+        result = rate_limited_script_runner(
             [
                 "python3",
                 "scripts/weekly_rollover/create_active_tasks_from_templates.py",
                 "--config", "test_notion_config.yaml",
                 "--now", test_date
             ],
-            capture_output=True,
-            text=True,
-            env={**os.environ, "NOTION_INTEGRATION_SECRET": os.environ.get("NOTION_INTEGRATION_SECRET")}
+            estimate_api_calls=50
         )
 
         assert result.returncode == 0, f"Script failed:\n{result.stderr}"
