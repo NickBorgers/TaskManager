@@ -10,9 +10,12 @@ from utils.notion_client import create_rate_limited_client
 with open("notion_config.yaml", "r") as f:
     config = yaml.safe_load(f)
 
+# Get Notion token (prefer environment variable, fallback to config file)
 NOTION_TOKEN = os.environ.get("NOTION_INTEGRATION_SECRET")
 if NOTION_TOKEN is None:
-    raise EnvironmentError("NOTION_INTEGRATION_SECRET environment variable not set.")
+    NOTION_TOKEN = config.get("notion_integration_secret")
+if NOTION_TOKEN is None:
+    raise EnvironmentError("NOTION_INTEGRATION_SECRET not set. Provide via environment variable or notion_integration_secret in config file.")
 
 DATABASE_ID = config.get("template_tasks_db_id")
 if DATABASE_ID is None:

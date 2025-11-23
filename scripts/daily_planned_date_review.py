@@ -293,11 +293,13 @@ def main():
     with open(args.config, "r") as f:
         config = yaml.safe_load(f)
 
-    # Get Notion token
+    # Get Notion token (prefer environment variable, fallback to config file)
     NOTION_TOKEN = os.environ.get("NOTION_INTEGRATION_SECRET")
     if NOTION_TOKEN is None:
-        logger.error("NOTION_INTEGRATION_SECRET environment variable not set.")
-        raise EnvironmentError("NOTION_INTEGRATION_SECRET environment variable not set.")
+        NOTION_TOKEN = config.get("notion_integration_secret")
+    if NOTION_TOKEN is None:
+        logger.error("NOTION_INTEGRATION_SECRET not set. Provide via environment variable or notion_integration_secret in config file.")
+        raise EnvironmentError("NOTION_INTEGRATION_SECRET not set. Provide via environment variable or notion_integration_secret in config file.")
 
     # Get active database ID
     ACTIVE_DB_ID = config.get("active_tasks_db_id")

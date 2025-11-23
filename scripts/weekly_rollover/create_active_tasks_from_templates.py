@@ -330,10 +330,13 @@ def _initialise_from_config(config_path):
     with open(config_path, "r") as f:
         config = yaml.safe_load(f)
 
+    # Prefer environment variable, fallback to config file
     NOTION_TOKEN = os.environ.get("NOTION_INTEGRATION_SECRET")
     if NOTION_TOKEN is None:
-        logger.error("NOTION_INTEGRATION_SECRET environment variable not set.")
-        raise EnvironmentError("NOTION_INTEGRATION_SECRET environment variable not set.")
+        NOTION_TOKEN = config.get("notion_integration_secret")
+    if NOTION_TOKEN is None:
+        logger.error("NOTION_INTEGRATION_SECRET not set. Provide via environment variable or notion_integration_secret in config file.")
+        raise EnvironmentError("NOTION_INTEGRATION_SECRET not set. Provide via environment variable or notion_integration_secret in config file.")
 
     TEMPLATE_DB_ID = config.get("template_tasks_db_id")
     ACTIVE_DB_ID = config.get("active_tasks_db_id")
