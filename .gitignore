@@ -214,3 +214,4 @@ template_tasks.yaml
 
 # Token files (API keys, credentials, etc.)
 .*token*
+notion_config.yaml
