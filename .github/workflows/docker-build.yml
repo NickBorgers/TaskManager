@@ -24,13 +24,40 @@ jobs:
     # Only needed for tag pushes - workflow_run already ensures tests passed
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
     steps:
-      - name: Wait for test workflow to complete
-        uses: lewagon/wait-on-check-action@v1.3.4
+      - name: Wait for Integration Tests to complete
+        uses: actions/github-script@v7
         with:
-          ref: ${{ github.ref }}
-          check-name: 'Integration Tests'
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          wait-interval: 10
+          script: |
+            const maxAttempts = 90;  // 15 minutes max (90 * 10s)
+            const intervalMs = 10000;
+
+            for (let i = 0; i < maxAttempts; i++) {
+              const { data: checks } = await github.rest.checks.listForRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: context.sha,
+              });
+
+              const integrationTests = checks.check_runs.find(c => c.name === 'Integration Tests');
+
+              if (integrationTests) {
+                if (integrationTests.status === 'completed') {
+                  if (integrationTests.conclusion === 'success') {
+                    console.log('✅ Integration Tests passed!');
+                    return;
+                  } else {
+                    throw new Error(`❌ Integration Tests failed with conclusion: ${integrationTests.conclusion}`);
+                  }
+                }
+                console.log(`⏳ Integration Tests status: ${integrationTests.status} (attempt ${i + 1}/${maxAttempts})`);
+              } else {
+                console.log(`⏳ Integration Tests not started yet (attempt ${i + 1}/${maxAttempts})`);
+              }
+
+              await new Promise(r => setTimeout(r, intervalMs));
+            }
+
+            throw new Error('⏰ Timeout waiting for Integration Tests');
 
   build:
     name: Build and Push
