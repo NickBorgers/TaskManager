@@ -112,7 +112,7 @@ jobs:
 
     - name: Upload validation logs
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: validation-logs
         path: /tmp/*test.log
