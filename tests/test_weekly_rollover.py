@@ -30,6 +30,7 @@ with patch.dict(os.environ, {'NOTION_INTEGRATION_SECRET': 'test-token'}, clear=T
                 build_active_task_properties,
                 get_active_tasks_for_template,
                 is_status_complete,
+                is_status_done,
                 extract_completed_date,
                 update_template_last_completed,
                 is_task_due,
@@ -328,9 +329,129 @@ class TestStatusCompletion:
                 }
             }
         }
-        
+
         result = is_status_complete(page, active_schema)
         assert result is False
+
+
+class TestStatusDone:
+    """Test is_status_done functionality - checks for specifically 'Done' status"""
+
+    def test_is_status_done_true(self):
+        """Test status done check when task is Done"""
+        page = {
+            "properties": {
+                "Status": {
+                    "type": "status",
+                    "status": {"id": "done1", "name": "Done"}
+                }
+            }
+        }
+        active_schema = {
+            "Status": {
+                "status": {
+                    "groups": [
+                        {"name": "Complete", "option_ids": ["done1", "not_needed1", "duplicate1"]}
+                    ]
+                }
+            }
+        }
+
+        result = is_status_done(page, active_schema)
+        assert result is True
+
+    def test_is_status_done_false_not_needed(self):
+        """Test status done check when task is 'Not Needed' (in Complete group but not Done)"""
+        page = {
+            "properties": {
+                "Status": {
+                    "type": "status",
+                    "status": {"id": "not_needed1", "name": "Not Needed"}
+                }
+            }
+        }
+        active_schema = {
+            "Status": {
+                "status": {
+                    "groups": [
+                        {"name": "Complete", "option_ids": ["done1", "not_needed1", "duplicate1"]}
+                    ]
+                }
+            }
+        }
+
+        result = is_status_done(page, active_schema)
+        assert result is False
+
+    def test_is_status_done_false_duplicate(self):
+        """Test status done check when task is 'Duplicate?' (in Complete group but not Done)"""
+        page = {
+            "properties": {
+                "Status": {
+                    "type": "status",
+                    "status": {"id": "duplicate1", "name": "Duplicate?"}
+                }
+            }
+        }
+        active_schema = {
+            "Status": {
+                "status": {
+                    "groups": [
+                        {"name": "Complete", "option_ids": ["done1", "not_needed1", "duplicate1"]}
+                    ]
+                }
+            }
+        }
+
+        result = is_status_done(page, active_schema)
+        assert result is False
+
+    def test_is_status_done_false_in_progress(self):
+        """Test status done check when task is In Progress"""
+        page = {
+            "properties": {
+                "Status": {
+                    "type": "status",
+                    "status": {"id": "active1", "name": "In Progress"}
+                }
+            }
+        }
+        active_schema = {
+            "Status": {
+                "status": {
+                    "groups": [
+                        {"name": "Complete", "option_ids": ["done1"]}
+                    ]
+                }
+            }
+        }
+
+        result = is_status_done(page, active_schema)
+        assert result is False
+
+    def test_is_status_done_no_status_property(self):
+        """Test status done check when no status property exists"""
+        page = {"properties": {}}
+        active_schema = {"Status": {"status": {"groups": []}}}
+
+        result = is_status_done(page, active_schema)
+        assert result is False
+
+    def test_is_status_done_null_status(self):
+        """Test status done check when status value is null"""
+        page = {
+            "properties": {
+                "Status": {
+                    "type": "status",
+                    "status": None
+                }
+            }
+        }
+        active_schema = {"Status": {"status": {"groups": []}}}
+
+        result = is_status_done(page, active_schema)
+        assert result is False
+
 
 class TestCompletedDateExtraction:
     """Test completed date extraction functionality"""
