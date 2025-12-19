@@ -186,6 +186,22 @@ def is_status_complete(page, active_schema):
     complete_option_ids = set(complete_group.get("option_ids", []))
     return status_id in complete_option_ids
 
+def is_status_done(page, active_schema):
+    """Check if a task's status is specifically 'Done'.
+
+    This is distinct from is_status_complete() which checks if the status is
+    in the 'Complete' group (which includes Done, Not Needed, and Duplicate?).
+    Only tasks marked 'Done' should update the template's Last Completed date.
+    """
+    props = page.get("properties", {})
+    status_prop = props.get("Status")
+    if not status_prop or status_prop.get("type") != "status":
+        return False
+    status_val = status_prop["status"]
+    if not status_val:
+        return False
+    return status_val.get("name") == "Done"
+
 def extract_completed_date(task):
     props = task.get("properties", {})
     completed = props.get("Completed Date")
@@ -453,7 +469,9 @@ def main():
         most_recent = None
         most_recent_page_id = None
         for page in active_tasks:
-            if is_status_complete(page, active_schema):
+            # Only update Last Completed when task is specifically "Done"
+            # Not when marked "Not Needed" or "Duplicate?" (also in Complete group)
+            if is_status_done(page, active_schema):
                 completed_date = extract_completed_date(page)
                 logger.debug(f"Task {page.get('id')} completed_date: {completed_date}")
                 if completed_date and (most_recent is None or completed_date > most_recent):
