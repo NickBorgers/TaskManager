@@ -18,14 +18,32 @@ env:
   DOCKER_HUB_USERNAME: ${{ vars.DOCKER_HUB_USERNAME }}
 
 jobs:
+  wait-for-tests:
+    name: Wait for Tests
+    runs-on: ubuntu-latest
+    # Only needed for tag pushes - workflow_run already ensures tests passed
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - name: Wait for test workflow to complete
+        uses: lewagon/wait-on-check-action@v1.3.4
+        with:
+          ref: ${{ github.ref }}
+          check-name: 'Integration Tests'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 10
+
   build:
     name: Build and Push
     runs-on: ubuntu-latest
-    # Only run if triggered by successful test workflow, tag push, or manual dispatch
+    needs: [wait-for-tests]
+    # Run if:
+    # - wait-for-tests succeeded (tag push with tests passed)
+    # - wait-for-tests was skipped (workflow_run or workflow_dispatch)
+    # AND for workflow_run, only if the triggering workflow succeeded
     if: |
-      github.event_name == 'push' ||
-      github.event_name == 'workflow_dispatch' ||
-      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
+      always() &&
+      (needs.wait-for-tests.result == 'success' || needs.wait-for-tests.result == 'skipped') &&
+      (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success')
     permissions:
       contents: read
       packages: write
